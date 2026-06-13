@@ -5,6 +5,15 @@ import type { ChatMessagesResult, ParsedMessage } from '@/features/chat/types';
 const POLL_INTERVAL_MS = 5000;
 
 /**
+ * Appends a cache-busting timestamp to prevent the browser from serving
+ * a stale HTTP-cached response when the file is moved or deleted.
+ */
+function bustCache(url: string): string {
+  const sep = url.includes('?') ? '&' : '?';
+  return `${url}${sep}_t=${Date.now()}`;
+}
+
+/**
  * Fetches and parses a WhatsApp chat export file.
  *
  * Auto-detects when `chat.txt` is added or removed:
@@ -37,7 +46,8 @@ export function useChatMessages(chatFilePath: string): ChatMessagesResult {
     setError(null);
 
     try {
-      const response = await fetch(chatFilePath);
+      // bustCache ensures we never get a stale HTTP-cached 200 when the file was removed
+      const response = await fetch(bustCache(chatFilePath));
 
       if (response.status === 404) {
         if (!cancelledRef.current && currentLoad === loadCountRef.current) {
@@ -84,7 +94,7 @@ export function useChatMessages(chatFilePath: string): ChatMessagesResult {
       } else {
         // File is loaded → lightweight HEAD to detect when it's removed
         try {
-          const res = await fetch(chatFilePath, { method: 'HEAD' });
+          const res = await fetch(bustCache(chatFilePath), { method: 'HEAD' });
           if (res.status === 404 && !cancelledRef.current) {
             setMessages([]);
             setNotFound(true);

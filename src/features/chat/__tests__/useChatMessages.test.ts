@@ -275,7 +275,9 @@ describe('useChatMessages', () => {
       await waitFor(() => expect(result.current.isLoading).toBe(false));
 
       expect(result.current.messages).toHaveLength(1);
-      expect(mockFetch).toHaveBeenCalledWith('/path/with spaces/file.txt');
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining('/path/with spaces/file.txt'),
+      );
    });
 
    it('should handle AbortError like any other error', async () => {
@@ -416,7 +418,8 @@ describe('useChatMessages', () => {
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-      expect(mockFetch).toHaveBeenCalledWith('');
+      // The empty path gets ?_t=... appended; just ensure it was called
+      expect(mockFetch).toHaveBeenCalledOnce();
       expect(result.current.messages).toHaveLength(1);
    });
 
@@ -542,7 +545,9 @@ describe('useChatMessages', () => {
       renderHook(() => useChatMessages('/custom/path/chat.txt'));
 
       await vi.waitFor(() => {
-         expect(mockFetch).toHaveBeenCalledWith('/custom/path/chat.txt');
+         expect(mockFetch).toHaveBeenCalledWith(
+            expect.stringContaining('/custom/path/chat.txt'),
+         );
       });
    });
 
@@ -556,7 +561,9 @@ describe('useChatMessages', () => {
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-      expect(mockFetch).toHaveBeenCalledWith('/chat.txt?v=2');
+      expect(mockFetch).toHaveBeenCalledWith(
+         expect.stringContaining('/chat.txt?v=2'),
+      );
       expect(result.current.messages).toHaveLength(1);
    });
 });
