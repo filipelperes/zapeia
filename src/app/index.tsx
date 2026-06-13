@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useChatMessages, ChatLayout, EmptyState, ErrorDisplay, useUserName } from '@/features/chat';
-import { loadChatFromCache, saveChatToCache } from '@/utils/chatCache';
+import { loadChatFromCache, saveChatToCache, clearChatCache } from '@/utils/chatCache';
 import { deriveConversationTitle } from '@/utils/parsechat';
 import type { ParsedMessage } from '@/features/chat/types';
 
@@ -20,6 +20,14 @@ function App() {
       setCachedMessages(cached.messages);
     }
   }, []);
+
+  // When the chat file is removed (404), clear cached data to show EmptyState
+  useEffect(() => {
+    if (notFound && messages.length === 0) {
+      setCachedMessages(null);
+      clearChatCache();
+    }
+  }, [notFound, messages.length]);
 
   // Capture raw chat text for title derivation
   useEffect(() => {
@@ -52,7 +60,10 @@ function App() {
     }
   }, [isLoading, messages, title]);
 
-  const displayMessages = messages.length > 0 ? messages : (cachedMessages ?? []);
+  // Only use cached messages when file exists; if 404, show nothing immediately
+  const displayMessages = messages.length > 0
+    ? messages
+    : (!notFound ? (cachedMessages ?? []) : []);
 
   // --- Estado: arquivo não configurado (404) ---
   if (notFound && displayMessages.length === 0) {
