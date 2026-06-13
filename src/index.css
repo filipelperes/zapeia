@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+   --font-inter: 'Inter', sans-serif;
+   --color-whatsapp-dark: #111B21;
+   --color-whatsapp-header: #075E54;
+   --color-whatsapp-green: #00A884;
+   --color-whatsapp-sender: #06CF9C;
+   --color-whatsapp-bg: #E5DDD5;
+   --color-whatsapp-input: #F0F2F5;
+   --color-whatsapp-subtitle: #B0D0CB;
+   --color-whatsapp-dark-bg: #0B141A;
+   --color-whatsapp-dark-bubble: #1F2C33;
+   --color-whatsapp-dark-text: #E9EDEF;
+   --color-whatsapp-dark-subtext: #8696A0;
+}
+
+/* WhatsApp-style base layer */
+@layer base {
+   *,
+   *::before,
+   *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+   }
+
+   :root {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+   }
+
+   html {
+      scroll-behavior: smooth;
+   }
+
+   body {
+      background-color: #111B21;
+   }
+
+   ul {
+      list-style-type: none;
+   }
+
+   a {
+      text-decoration: none;
+      color: inherit;
+   }
+
+   img {
+      max-width: 100%;
+      height: auto;
+   }
+
+   #root {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      background-color: #111B21;
+   }
+
+   /* Custom scrollbar — WhatsApp Web style */
+   ::-webkit-scrollbar {
+      width: 6px;
+   }
+
+   ::-webkit-scrollbar-track {
+      background: transparent;
+   }
+
+   ::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+   }
+
+   ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+   }
+}
+
+/* WhatsApp Dark Mode — applied via data-theme="dark" on <html> */
+[data-theme="dark"] {
+   --chat-bg: #0B141A;
+   --chat-pattern: #101A20;
+   --chat-bubble: #1F2C33;
+   --chat-bubble-own: #005C4B;
+   --chat-text: #E9EDEF;
+   --chat-subtext: #8696A0;
+   --chat-header: #1F2C33;
+   --chat-input: #1F2C33;
+   --chat-input-border: #2F3D46;
+}
+
+[data-theme="dark"] body {
+   background-color: #0B141A;
+}
+
+[data-theme="dark"] #root {
+   background-color: #0B141A;
+}
+
+[data-theme="dark"] .chat-bg {
+   background-color: #0B141A !important;
+   background-image: none !important;
+}
+
+[data-theme="dark"] .chat-bubble {
+   background-color: #1F2C33 !important;
+   color: #E9EDEF !important;
+}
+
+[data-theme="dark"] .chat-bubble-own {
+   background-color: #005C4B !important;
+   color: #E9EDEF !important;
+}
+
+[data-theme="dark"] .chat-bubble-text {
+   color: #E9EDEF !important;
+}
+
+[data-theme="dark"] .chat-system {
+   background-color: #182229 !important;
+   color: #8696A0 !important;
+}
+
+[data-theme="dark"] .chat-date {
+   background-color: #182229 !important;
+   color: #8696A0 !important;
+}
+
+[data-theme="dark"] .chat-input {
+   background-color: #1F2C33 !important;
+   border-top-color: #2F3D46 !important;
+}
+
+[data-theme="dark"] .chat-header {
+   background-color: #1F2C33 !important;
+}
+
+[data-theme="dark"] .chat-avatar {
+   background-color: #2A8C7C !important;
+}
+
+[data-theme="dark"] .chat-setting-input {
+   background-color: #111B21 !important;
+   border-color: #2F3D46 !important;
+   color: #E9EDEF !important;
+}
+
+[data-theme="dark"] .chat-setting-dropdown {
+   background-color: #1F2C33 !important;
+   border-color: #2F3D46 !important;
+}
+
+[data-theme="dark"] .chat-menu-item {
+   color: #E9EDEF !important;
+}
+
+[data-theme="dark"] .chat-menu-item:hover {
+   background-color: #2F3D46 !important;
+}
+
+[data-theme="dark"] .chat-input-field {
+   background-color: #2A3942 !important;
+   color: #E9EDEF !important;
+}
+
+[data-theme="dark"] .chat-input-field::placeholder {
+   color: #8696A0 !important;
+}
+
+[data-theme="dark"] .chat-input-icon {
+   color: #8696A0 !important;
+}
+
+[data-theme="dark"] .chat-input-icon:hover {
+   color: #E9EDEF !important;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+   background-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+   background-color: rgba(255, 255, 255, 0.25);
+}

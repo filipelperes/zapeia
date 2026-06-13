@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Chat bubble -->
+  <rect x="2" y="2" width="26" height="22" rx="6" fill="#075E54"/>
+  <path d="M2 24 L8 18 L28 18" fill="#075E54"/>
+  <!-- Letter Z -->
+  <text x="15" y="18" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">Z</text>
+</svg>
