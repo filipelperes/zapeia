@@ -1,0 +1,23 @@
+{
+  "extends": "@tsconfig/vite-react/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@/CommandPalette/*": [
+        "./src/features/CommandPalette/*"
+      ]
+    },
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./src/types"
+    ],
+  }
+}
