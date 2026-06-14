@@ -1,11 +1,19 @@
 <div align="center">
-  <a href="https://github.com/seu-usuario/zapeia">
+  <a href="https://github.com/filipelperes/zapeia">
     <img src="public/favicon.svg" alt="Zapeia logo" width="80" />
   </a>
   <h1>Zapeia</h1>
   <p><strong>Visualizador de Conversas Exportadas do WhatsApp</strong></p>
   <p>
     <em>"Zap" + "passeia" — Navegue pelas suas conversas do Zap.</em>
+  </p>
+  <p>
+    <a href="https://hub.docker.com/r/filipelperes/zapeia">
+      <img src="https://img.shields.io/docker/v/filipelperes/zapeia?label=Docker%20Hub&logo=docker" alt="Docker Hub" />
+    </a>
+    <a href="https://github.com/filipelperes/zapeia/actions/workflows/docker-publish.yml">
+      <img src="https://img.shields.io/github/actions/workflow/status/filipelperes/zapeia/docker-publish.yml?branch=main&label=CI%2FCD&logo=githubactions" alt="CI/CD" />
+    </a>
   </p>
   <br/>
 </div>
@@ -152,6 +160,36 @@ docker run -d \
 
 ---
 
+## 🤖 CI/CD — Publicação automática no Docker Hub
+
+Sempre que houver um **push na branch `main`** ou a criação de uma **tag `v*`** (ex: `v0.2.0`), o GitHub Actions:
+
+1. Faz checkout do repositório
+2. Faz login no Docker Hub (via `DOCKER_USERNAME`/`DOCKER_PASSWORD`)
+3. Extrai tags e labels automáticas (`latest`, `0.1.0`, `0.1`, etc.)
+4. Builda e publica a imagem em **`filipelperes/zapeia`**
+
+### Tags geradas automaticamente
+
+| Evento | Tags |
+|---|---|
+| Push na `main` | `latest` |
+| Tag `v0.2.0` | `0.2.0`, `0.2` |
+| Tag `v1.0.0` | `1.0.0`, `1.0` |
+
+> 💡 Também é possível disparar o workflow manualmente pelo GitHub UI na aba **Actions** → **Publish Docker image** → **Run workflow**.
+
+### Configuração necessária (uma vez)
+
+Adicione estes **segredos** no repositório em `Settings > Secrets and variables > Actions`:
+
+| Nome | Valor |
+|---|---|
+| `DOCKER_USERNAME` | `filipelperes` |
+| `DOCKER_PASSWORD` | Um [token de acesso](https://hub.docker.com/settings/security) do Docker Hub (não a senha da conta) |
+
+---
+
 ## 🔧 A tela de boas-vindas (primeiro acesso)
 
 Quando o Zapeia é aberto sem um `public/chat.txt` configurado, ele exibe uma tela intuitiva de boas-vindas que:
@@ -178,7 +216,7 @@ Isso permite que você faça o deploy do Zapeia sem dados de exemplo e configure
 - Docker Compose (já incluso no Docker Desktop)
 
 ```bash
-git clone https://github.com/seu-usuario/zapeia.git
+git clone https://github.com/filipelperes/zapeia.git
 cd zapeia
 npm install
 ```

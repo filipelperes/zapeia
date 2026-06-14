@@ -42,7 +42,6 @@ public/media
 docker-compose.yml
 Dockerfile
 .dockerignore
-nginx.conf
 
 # Temp
 *.log

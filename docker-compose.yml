@@ -1,9 +1,11 @@
 services:
   zapeia:
+    # ── Build local (comente se for usar a imagem do Hub) ──
     build:
       context: .
       dockerfile: Dockerfile
-    image: zapeia:latest
+    # ── Imagem do Docker Hub (descomente e comente o build acima) ──
+    # image: filipelperes/zapeia:latest
     container_name: zapeia
     ports:
       - "5174:80"
