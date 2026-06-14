@@ -14,6 +14,36 @@
     <a href="https://github.com/filipelperes/zapeia/actions/workflows/docker-publish.yml">
       <img src="https://img.shields.io/github/actions/workflow/status/filipelperes/zapeia/docker-publish.yml?branch=main&label=CI%2FCD&logo=githubactions" alt="CI/CD" />
     </a>
+    <a href="https://hub.docker.com/r/filipelperes/zapeia">
+      <img src="https://img.shields.io/docker/pulls/filipelperes/zapeia?logo=docker&label=Docker%20Pulls" alt="Docker Pulls" />
+    </a>
+  </p>
+  <p>
+    <a href="https://react.dev/">
+      <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white" alt="React" />
+    </a>
+    <a href="https://www.typescriptlang.org/">
+      <img src="https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
+    </a>
+    <a href="https://vite.dev/">
+      <img src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white" alt="Vite" />
+    </a>
+  </p>
+  <p>
+    <a href="https://tailwindcss.com/">
+      <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+    </a>
+    <a href="https://vitest.dev/">
+      <img src="https://img.shields.io/badge/Vitest-4-6E9F18?logo=vitest&logoColor=white" alt="Vitest" />
+    </a>
+  </p>
+  <p>
+    <a href="https://github.com/filipelperes/zapeia/blob/main/LICENSE">
+      <img src="https://img.shields.io/github/license/filipelperes/zapeia" alt="License" />
+    </a>
+    <a href="https://github.com/filipelperes/zapeia">
+      <img src="https://img.shields.io/github/stars/filipelperes/zapeia?style=social" alt="Stars" />
+    </a>
   </p>
   <br/>
 </div>
