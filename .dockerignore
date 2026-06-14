@@ -42,6 +42,7 @@ public/media
 docker-compose.yml
 Dockerfile
 .dockerignore
+docker-hub-readme.md
 
 # Temp
 *.log
