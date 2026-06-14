@@ -1,0 +1,16 @@
+services:
+  zapeia:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: zapeia:latest
+    container_name: zapeia
+    ports:
+      - "5174:80"
+    volumes:
+      # Dados do usuário — montados em runtime, NÃO na imagem
+      - ./chat.txt:/usr/share/nginx/html/chat.txt
+      - ./media:/usr/share/nginx/html/media
+    environment:
+      - TZ=America/Sao_Paulo
+    restart: unless-stopped

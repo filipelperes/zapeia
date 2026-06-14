@@ -1,0 +1,48 @@
+# Dependencies
+node_modules
+npm-debug.log*
+
+# Build output
+dist
+dist-ssr
+
+# Version control
+.git
+.gitattributes
+.gitignore
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+
+# OpenCode / AI
+.opencode
+.agents
+AGENTS.md
+skills-lock.json
+
+# User data — these are mounted as volumes at runtime,
+# NOT baked into the image
+public/chat.txt
+public/media
+
+# Docker files (not needed in build context)
+docker-compose.yml
+Dockerfile
+.dockerignore
+nginx.conf
+
+# Temp
+*.log

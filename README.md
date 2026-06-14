@@ -36,6 +36,7 @@ O nome é um trocadilho entre **Zap** (apelido do WhatsApp) e **passeia** (naveg
 | 📱 **Responsivo** | Layout adaptável para desktop e mobile |
 | ⚡ **Cache local** | Carregamento instantâneo em visitas repetidas |
 | 🔄 **Auto-detecção** | Detecta automaticamente quando o arquivo de conversa é adicionado |
+| 🐳 **Containerizado** | Docker multi-stage com Nginx — imagem de ~25MB pronta para deploy |
 
 ---
 
@@ -102,6 +103,53 @@ npm run build
 
 Copie o conteúdo da pasta `dist/` para seu servidor web. **Lembre-se de colocar o `chat.txt` e as mídias dentro do diretório servido**, nos mesmos caminhos esperados pelo app.
 
+### 6. (Alternativa) Docker — self-hosted em 2 comandos
+
+O Zapeia oferece suporte a Docker com build multi-stage. Tudo que você precisa é o Docker instalado.
+
+```bash
+# 1. Copie sua conversa para o diretório do projeto
+cp /caminho/para/sua-conversa.txt ./chat.txt
+
+# 2. (Opcional) Extraia e copie as mídias
+unzip "_chat.txt.zip" -d /tmp/whatsapp-export
+cp -r /tmp/whatsapp-export/media/* ./media/
+
+# 3. Build + Start com Docker Compose
+docker compose up -d
+
+# 4. Acesse http://localhost:5174 🎉
+```
+
+> 🔄 **Auto-detecção**: O polling de 5s funciona normalmente com o bind mount. Basta substituir o `./chat.txt` no host que o Zapeia detecta automaticamente — sem rebuild, sem restart do container.
+
+#### Build manual da imagem
+
+```bash
+docker build -t zapeia:latest .
+docker run -d \
+  --name zapeia \
+  -p 5174:80 \
+  -v ./chat.txt:/usr/share/nginx/html/chat.txt \
+  -v ./media:/usr/share/nginx/html/media \
+  zapeia:latest
+```
+
+#### Arquitetura do container
+
+```
+┌────────────────────────────────────────────┐
+│          nginx:alpine (~25MB)              │
+│                                            │
+│  /usr/share/nginx/html/                    │
+│  ├── index.html          (build do Vite)   │
+│  ├── assets/             (JS + CSS com     │
+│  │                        hash, cache 1y)  │
+│  ├── chat.txt ← bind mount do usuário      │
+│  └── media/   ← bind mount do usuário      │
+└────────────────────────────────────────────┘
+```
+
 ---
 
 ## 🔧 A tela de boas-vindas (primeiro acesso)
@@ -121,8 +169,13 @@ Isso permite que você faça o deploy do Zapeia sem dados de exemplo e configure
 
 ### Pré-requisitos
 
+**Sem Docker:**
 - Node.js >= 18
 - npm, pnpm ou yarn
+
+**Com Docker (alternativa):**
+- [Docker](https://docs.docker.com/engine/install/) (qualquer versão recente)
+- Docker Compose (já incluso no Docker Desktop)
 
 ```bash
 git clone https://github.com/seu-usuario/zapeia.git
@@ -133,7 +186,7 @@ npm install
 ### Comandos úteis
 
 | Comando | Descrição |
-|---|---|
+|---|---|---|
 | `npm run dev` | Inicia servidor de desenvolvimento com hot-reload |
 | `npm run build` | Compila para produção em `dist/` |
 | `npm run preview` | Serve a build de produção localmente |
@@ -141,6 +194,10 @@ npm install
 | `npm run test:run` | Executa testes uma vez |
 | `npm run test:coverage` | Executa testes com cobertura |
 | `npm run lint` | Verifica o código com ESLint |
+| `docker compose up -d` | Build + start do container em background |
+| `docker compose down` | Para e remove o container |
+| `docker compose logs -f` | Acompanha os logs do container |
+| `docker build -t zapeia .` | Build manual da imagem Docker |
 
 ---
 
@@ -190,6 +247,12 @@ public/                       # Arquivos estáticos servidos pelo Vite
 ├── media/                    # ⚠️ Mídias da conversa (ignoradas pelo git)
 │   └── .gitkeep
 └── favicon.svg               # Ícone do Zapeia
+
+## Docker                          # Containerização (opcional)
+├── Dockerfile                 # Build multi-stage (Node → Nginx)
+├── docker-compose.yml         # Orquestração com volumes + portas
+├── nginx.conf                 # Configuração Nginx otimizada para SPA
+└── .dockerignore              # Exclusões do contexto de build
 ```
 
 ### Arquitetura
@@ -215,6 +278,8 @@ O projeto segue o padrão **Atomic Design** combinado com **Bulletproof React**:
 | [Vitest](https://vitest.dev/) | 4 | Testes unitários |
 | [date-fns](https://date-fns.org/) | 4 | Manipulação de datas |
 | [Testing Library](https://testing-library.com/) | — | Testes de componentes |
+| [Docker](https://www.docker.com/) | — | Containerização multi-stage |
+| [Nginx](https://nginx.org/) | Alpine | Servidor HTTP production-ready |
 
 ---
 
