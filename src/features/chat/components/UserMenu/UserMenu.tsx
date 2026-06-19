@@ -1,4 +1,20 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocale } from '@/features/chat/hooks/useLocale';
+
+/** Commonly available locale codes for date/time formatting */
+const DATE_LOCALES = [
+  { code: 'en-US', label: 'English (US)' },
+  { code: 'en-GB', label: 'English (UK)' },
+  { code: 'pt-BR', label: 'Português (BR)' },
+  { code: 'pt-PT', label: 'Português (PT)' },
+  { code: 'es', label: 'Español' },
+  { code: 'fr', label: 'Français' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'it', label: 'Italiano' },
+  { code: 'ja', label: '日本語' },
+  { code: 'zh-CN', label: '中文' },
+] as const;
 
 function MenuIcon() {
   return (
@@ -22,13 +38,18 @@ interface UserMenuProps {
   onNameClear?: () => void;
 }
 
-/** Dropdown menu with user name configuration */
+/** Dropdown menu with user name and date format configuration */
 export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, onNameClear }: UserMenuProps) {
+  const { t } = useTranslation();
+  const { locale, setLocale } = useLocale();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [localeEditing, setLocaleEditing] = useState(false);
   const [nameInput, setNameInput] = useState('');
+  const [localeInput, setLocaleInput] = useState('');
   const menuRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const localeInputRef = useRef<HTMLInputElement>(null);
 
   // Close on click outside
   useEffect(() => {
@@ -37,18 +58,26 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpen(false);
         setEditing(false);
+        setLocaleEditing(false);
       }
     };
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [open]);
 
-  // Focus input when editing
+  // Focus input when editing name
   useEffect(() => {
     if (editing) {
       inputRef.current?.focus();
     }
   }, [editing]);
+
+  // Focus input when editing locale
+  useEffect(() => {
+    if (localeEditing) {
+      localeInputRef.current?.focus();
+    }
+  }, [localeEditing]);
 
   const handleSave = useCallback(() => {
     const trimmed = nameInput.trim();
@@ -66,11 +95,36 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
     setEditing(true);
   }, [userName]);
 
+  const handleLocaleSelect = useCallback((code: string) => {
+    setLocale(code);
+    setLocaleEditing(false);
+  }, [setLocale]);
+
+  const handleCustomLocale = useCallback(() => {
+    const trimmed = localeInput.trim();
+    if (trimmed) {
+      setLocale(trimmed);
+    }
+    setLocaleEditing(false);
+  }, [localeInput, setLocale]);
+
+  const handleLocaleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter') handleCustomLocale();
+      if (e.key === 'Escape') {
+        setLocaleEditing(false);
+        setOpen(false);
+      }
+    },
+    [handleCustomLocale],
+  );
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') handleSave();
       if (e.key === 'Escape') {
         setEditing(false);
+        setLocaleEditing(false);
         setOpen(false);
       }
     },
@@ -82,17 +136,17 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
       <button
         onClick={() => setOpen((v) => !v)}
         className="hover:opacity-80 transition-opacity"
-        aria-label="Menu"
+        aria-label={t('userMenu.menu')}
       >
         <MenuIcon />
       </button>
 
       {open && (
-        <div className="chat-setting-dropdown absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
+        <div className="chat-setting-dropdown absolute right-0 top-full mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
           {editing ? (
             <div className="p-3">
               <p className="text-xs text-gray-500 mb-2 font-medium">
-                Seu nome nas mensagens
+                {t('userMenu.yourNameInMessages')}
               </p>
               <input
                 ref={inputRef}
@@ -100,7 +154,7 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
                 value={nameInput}
                 onChange={(e) => setNameInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ex: Nome Sobrenome"
+                placeholder={t('userMenu.namePlaceholder')}
                 className="chat-setting-input w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:border-[#00A884] transition-colors"
               />
               <div className="flex justify-end gap-2 mt-2">
@@ -111,21 +165,70 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
                   }}
                   className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors"
                 >
-                  Cancelar
+                  {t('userMenu.cancel')}
                 </button>
                 <button
                   onClick={handleSave}
                   className="flex items-center gap-1 px-3 py-1.5 text-xs text-white bg-[#00A884] rounded-lg hover:bg-[#06CF9C] transition-colors"
                 >
                   <CheckIcon />
-                  Salvar
+                  {t('userMenu.save')}
+                </button>
+              </div>
+            </div>
+          ) : localeEditing ? (
+            <div className="p-3">
+              <p className="text-xs text-gray-500 mb-2 font-medium">
+                {t('userMenu.dateFormat')}
+              </p>
+              {/* Quick-select common locales */}
+              <div className="grid grid-cols-2 gap-1 mb-2">
+                {DATE_LOCALES.map((loc) => (
+                  <button
+                    key={loc.code}
+                    onClick={() => handleLocaleSelect(loc.code)}
+                    className={`text-left px-2 py-1.5 text-xs rounded transition-colors ${
+                      locale === loc.code
+                        ? 'bg-[#00A884]/10 text-[#00A884] font-medium'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    {loc.label}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-gray-400 mb-1">{t('userMenu.customLocale')}</p>
+              <div className="flex gap-2">
+                <input
+                  ref={localeInputRef}
+                  type="text"
+                  value={localeInput}
+                  onChange={(e) => setLocaleInput(e.target.value)}
+                  onKeyDown={handleLocaleKeyDown}
+                  placeholder={t('userMenu.localePlaceholder')}
+                  className="chat-setting-input flex-1 px-3 py-2 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:border-[#00A884] transition-colors"
+                />
+                <button
+                  onClick={handleCustomLocale}
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs text-white bg-[#00A884] rounded-lg hover:bg-[#06CF9C] transition-colors"
+                >
+                  <CheckIcon />
+                  {t('userMenu.apply')}
+                </button>
+              </div>
+              <div className="flex justify-end mt-2">
+                <button
+                  onClick={() => setLocaleEditing(false)}
+                  className="px-3 py-1 text-xs text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  {t('userMenu.cancel')}
                 </button>
               </div>
             </div>
           ) : (
             <div className="py-1">
               <div className="px-3 py-2 text-xs text-gray-400 font-medium uppercase tracking-wide">
-                Configurações
+                {t('userMenu.settings')}
               </div>
               <button
                 onClick={handleEditClick}
@@ -133,11 +236,11 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
               >
                 {userName ? (
                   <>
-                    <span className="block text-xs text-gray-400">Seu nome</span>
+                    <span className="block text-xs text-gray-400">{t('userMenu.yourName')}</span>
                     <span className="block text-sm font-medium text-[#06CF9C]">{userName}</span>
                   </>
                 ) : (
-                  <span className="block text-sm text-gray-600">Definir meu nome...</span>
+                  <span className="block text-sm text-gray-600">{t('userMenu.setMyName')}</span>
                 )}
               </button>
               {userName && (
@@ -148,9 +251,22 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
                   }}
                   className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 transition-colors"
                 >
-                  Limpar nome
+                  {t('userMenu.clearName')}
                 </button>
               )}
+              {/* Date format locale selector */}
+              <div className="border-t border-gray-100 mt-1 pt-1">
+                <button
+                  onClick={() => {
+                    setLocaleInput(locale);
+                    setLocaleEditing(true);
+                  }}
+                  className="chat-menu-item w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                >
+                  <span className="block text-xs text-gray-400">{t('userMenu.dateFormat')}</span>
+                  <span className="block text-sm font-medium text-[#06CF9C]">{locale}</span>
+                </button>
+              </div>
             </div>
           )}
         </div>

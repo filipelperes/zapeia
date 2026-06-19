@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { formatDateString } from '@/utils/formatDateString';
+import { useLocale } from '@/features/chat/hooks/useLocale';
 
 interface MessageTimeProps {
   date: string;
@@ -8,7 +9,8 @@ interface MessageTimeProps {
 
 /** Renders a formatted message timestamp (WhatsApp-style, right-aligned, gray) */
 export const MessageTime = memo(function MessageTime({ date, time }: MessageTimeProps) {
-  const formatted = formatDateString(date, time);
+  const { locale } = useLocale();
+  const formatted = formatDateString(date, time, locale);
 
   return (
     <span className="text-[11px] text-gray-400 select-none">

@@ -4,3 +4,4 @@ export type { UserNameActions } from './useUserName';
 export { useSearch } from './useSearch';
 export { useTheme } from './useTheme';
 export type { Theme } from './useTheme';
+export { useLocale } from './useLocale';

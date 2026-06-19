@@ -1,4 +1,4 @@
-export { useChatMessages, useTheme, useUserName, useSearch } from './hooks';
+export { useChatMessages, useTheme, useUserName, useSearch, useLocale } from './hooks';
 export type { Theme } from './hooks';
 export {
   ChatBubble,
