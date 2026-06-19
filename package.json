@@ -5,19 +5,26 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && i18next-cli extract && i18next-cli types && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "i18n:extract": "i18next-cli extract",
+    "i18n:extract:watch": "i18next-cli extract --watch",
+    "i18n:types": "i18next-cli types",
+    "i18n:status": "i18next-cli status",
+    "i18n:sync": "i18next-cli sync"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.1",
     "@tsconfig/vite-react": "^8.0.6",
     "date-fns": "^4.4.0",
+    "i18next": "^26.3.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-i18next": "^17.0.8",
     "tailwindcss": "^4.3.1"
   },
   "devDependencies": {
@@ -33,6 +40,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
+    "i18next-cli": "^1.64.1",
     "jsdom": "^29.1.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.0",
