@@ -24,13 +24,13 @@ describe('renderMediaContent', () => {
    it('should render contact info for vcf files', () => {
       const result = renderMediaContent('media', 'contato.vcf') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Contato disponível:')).toBeDefined();
-   });
+       expect(screen.getByText('Contact available:')).toBeDefined();
+    });
 
-   it('should show media omitted message', () => {
+    it('should show media omitted message', () => {
       const result = renderMediaContent('message', '<Media omitted>') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Mídia não exportada ou indisponível')).toBeDefined();
+      expect(screen.getByText('Media not exported or unavailable')).toBeDefined();
    });
 
    it('should format plain text messages', () => {
@@ -41,13 +41,13 @@ describe('renderMediaContent', () => {
    it('should handle file attached type', () => {
       const result = renderMediaContent('media', 'doc.pdf (file attached)') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should render download link for generic files', () => {
       const result = renderMediaContent('media', 'documento.pdf') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should render png images', () => {
@@ -71,7 +71,7 @@ describe('renderMediaContent', () => {
    it('should render download link for unknown file types', () => {
       const result = renderMediaContent('media', 'unknown.xyz') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should handle file attached with image extension', () => {
@@ -105,13 +105,13 @@ describe('renderMediaContent', () => {
    it('should render deleted message type', () => {
       const result = renderMediaContent('deleted', 'Some content') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
+      expect(screen.getByText('Deleted message')).toBeDefined();
    });
 
    it('should render deleted message even with media filename', () => {
       const result = renderMediaContent('deleted', 'photo.jpg') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
+      expect(screen.getByText('Deleted message')).toBeDefined();
    });
 
    // --- Unknown and edge case file types ---
@@ -119,19 +119,19 @@ describe('renderMediaContent', () => {
    it('should render download link for gif files', () => {
       const result = renderMediaContent('media', 'animation.gif') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should render download link for svg files', () => {
       const result = renderMediaContent('media', 'icon.svg') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should render download link for mp3 files', () => {
       const result = renderMediaContent('media', 'audio.mp3') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    // --- Files with multiple dots ---
@@ -140,7 +140,7 @@ describe('renderMediaContent', () => {
       const result = renderMediaContent('media', 'archive.tar.gz') as React.ReactElement;
       render(result);
       // .gz is unknown → download link
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should render image for jpg file with multiple dots in name', () => {
@@ -161,19 +161,19 @@ describe('renderMediaContent', () => {
    it('should handle filename with no extension (no dot)', () => {
       const result = renderMediaContent('media', 'README') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should handle filename with leading dot', () => {
       const result = renderMediaContent('media', '.hidden') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should handle filename with trailing dot', () => {
       const result = renderMediaContent('media', 'filename.') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should handle short filename like a.jpg', () => {
@@ -213,7 +213,7 @@ describe('renderMediaContent', () => {
    it('should handle file attached with vcf contact', () => {
       const result = renderMediaContent('message', 'contact.vcf (file attached)') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Contato disponível:')).toBeDefined();
+      expect(screen.getByText('Contact available:')).toBeDefined();
    });
 
    // --- Type-specific media rendering ---
@@ -257,31 +257,31 @@ describe('renderMediaContent', () => {
    it('should render download link for type contact with vcf', () => {
       const result = renderMediaContent('contact', 'contact.vcf') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Contato disponível:')).toBeDefined();
+      expect(screen.getByText('Contact available:')).toBeDefined();
    });
 
    it('should render type generic content as formatted text', () => {
       const result = renderMediaContent('generic', 'file.xyz (file attached)') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should handle deleted message with empty content', () => {
       const result = renderMediaContent('deleted', '') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
+      expect(screen.getByText('Deleted message')).toBeDefined();
    });
 
    it('should handle type audio with ogg file', () => {
       const result = renderMediaContent('audio', 'sound.ogg') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should handle type video with mov file', () => {
       const result = renderMediaContent('video', 'clip.mov') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should render image for jpg with type image', () => {
@@ -293,7 +293,7 @@ describe('renderMediaContent', () => {
    it('should render download link for type media with no extension', () => {
       const result = renderMediaContent('media', 'NOEXTENSION') as React.ReactElement;
       render(result);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+      expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should render formatted text for type message with special chars', () => {
@@ -301,10 +301,10 @@ describe('renderMediaContent', () => {
       expect(Array.isArray(result)).toBe(true);
    });
 
-   it('should render img with alt text "imagem"', () => {
+    it('should render img with alt text "image"', () => {
       const result = renderMediaContent('media', 'photo.jpg') as React.ReactElement;
       render(result);
-      const img = screen.getByAltText('imagem');
+      const img = screen.getByAltText('image');
       expect(img).toBeDefined();
    });
 

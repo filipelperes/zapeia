@@ -53,9 +53,9 @@ describe('ChatBubble', () => {
       expect(el.className).toContain('text-center');
    });
 
-   it('should show "Mensagem apagada" for deleted messages', () => {
-      render(<ChatBubble message={deletedMessage} />);
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
+    it('should show "Deleted message" for deleted messages', () => {
+       render(<ChatBubble message={deletedMessage} />);
+       expect(screen.getByText('Deleted message')).toBeDefined();
    });
 
    it('should not render sender for system messages', () => {
@@ -117,8 +117,8 @@ describe('ChatBubble', () => {
          content: 'You deleted this message',
          type: 'deleted',
       };
-      render(<ChatBubble message={youDeleted} />);
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
+       render(<ChatBubble message={youDeleted} />);
+       expect(screen.getByText('Deleted message')).toBeDefined();
    });
 
    it('should handle media omitted content', () => {
@@ -130,7 +130,7 @@ describe('ChatBubble', () => {
          type: 'media',
       };
       render(<ChatBubble message={mediaOmitted} />);
-      expect(screen.getByText('Mídia não exportada ou indisponível')).toBeDefined();
+       expect(screen.getByText('Media not exported or unavailable')).toBeDefined();
    });
 
    it('should have rounded corners on bubble', () => {
@@ -164,19 +164,19 @@ describe('ChatBubble', () => {
          content: 'contato.vcf', type: 'contact',
       };
       render(<ChatBubble message={contactMsg} />);
-      expect(screen.getByText('Contato disponível:')).toBeDefined();
+       expect(screen.getByText('Contact available:')).toBeDefined();
    });
 
-   it('should handle generic file type via ChatBubble', () => {
-      // 'generic' type with (file attached) suffix triggers download link
-      const fileMsg: ParsedMessage = {
-         date: '19/08/24', time: '11:00', sender: 'João',
-         content: 'documento.pdf (file attached)',
-         type: 'generic',
-      };
-      render(<ChatBubble message={fileMsg} />);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
-   });
+    it('should handle generic file type via ChatBubble', () => {
+       // 'generic' type with (file attached) suffix triggers download link
+       const fileMsg: ParsedMessage = {
+          date: '19/08/24', time: '11:00', sender: 'João',
+          content: 'documento.pdf (file attached)',
+          type: 'generic',
+       };
+       render(<ChatBubble message={fileMsg} />);
+       expect(screen.getByText('Download file')).toBeDefined();
+    });
 
    it('should handle message with very long content', () => {
       const longContent = 'A'.repeat(500);
@@ -251,15 +251,15 @@ describe('ChatBubble', () => {
       expect(screen.getByText('https://b.com')).toBeDefined();
    });
 
-   it('should handle document with file attached type', () => {
-      const docMsg: ParsedMessage = {
-         date: '19/08/24', time: '11:00', sender: 'João',
-         content: 'report.pdf (file attached)',
-         type: 'media',
-      };
-      render(<ChatBubble message={docMsg} />);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
-   });
+    it('should handle document with file attached type', () => {
+       const docMsg: ParsedMessage = {
+          date: '19/08/24', time: '11:00', sender: 'João',
+          content: 'report.pdf (file attached)',
+          type: 'media',
+       };
+       render(<ChatBubble message={docMsg} />);
+       expect(screen.getByText('Download file')).toBeDefined();
+    });
 
    it('should handle video mp4 with file attached', () => {
       const videoAttachedMsg: ParsedMessage = {
@@ -361,7 +361,7 @@ describe('ChatBubble', () => {
          content: 'photo.jpg', type: 'image',
       };
       render(<ChatBubble message={imgMsg} />);
-      const img = screen.getByAltText('imagem');
+       const img = screen.getByAltText('image');
       expect(img).toBeDefined();
    });
 
@@ -406,17 +406,17 @@ describe('ChatBubble', () => {
    });
 
    describe('edited indicator', () => {
-      it('should show "Editada" text when message is edited', () => {
-         const editedMsg: ParsedMessage = {
-            ...textMessage, edited: true,
-         };
-         render(<ChatBubble message={editedMsg} />);
-         expect(screen.getByText('Editada')).toBeDefined();
-      });
+       it('should show "Edited" text when message is edited', () => {
+          const editedMsg: ParsedMessage = {
+             ...textMessage, edited: true,
+          };
+          render(<ChatBubble message={editedMsg} />);
+          expect(screen.getByText('Edited')).toBeDefined();
+       });
 
-      it('should not show "Editada" text when message is not edited', () => {
-         render(<ChatBubble message={textMessage} />);
-         expect(screen.queryByText('Editada')).toBeNull();
-      });
+       it('should not show "Edited" text when message is not edited', () => {
+          render(<ChatBubble message={textMessage} />);
+          expect(screen.queryByText('Edited')).toBeNull();
+       });
    });
 });

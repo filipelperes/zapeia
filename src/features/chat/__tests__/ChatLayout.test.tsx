@@ -34,28 +34,28 @@ describe('ChatLayout', () => {
 
    it('should render input bar', () => {
       render(<ChatLayout messages={messages} />);
-      expect(screen.getByText('Digite uma mensagem')).toBeDefined();
-   });
+       expect(screen.getByText('Type a message')).toBeDefined();
+    });
 
-   it('should render emoji button', () => {
+    it('should render emoji button', () => {
       render(<ChatLayout messages={messages} />);
       expect(screen.getByLabelText('Emoji')).toBeDefined();
    });
 
    it('should render attach button', () => {
       render(<ChatLayout messages={messages} />);
-      expect(screen.getByLabelText('Anexar')).toBeDefined();
-   });
+       expect(screen.getByLabelText('Attach')).toBeDefined();
+    });
 
-   it('should render send button', () => {
-      render(<ChatLayout messages={messages} />);
-      expect(screen.getByLabelText('Enviar')).toBeDefined();
-   });
+    it('should render send button', () => {
+       render(<ChatLayout messages={messages} />);
+       expect(screen.getByLabelText('Send')).toBeDefined();
+    });
 
-   it('should show "Nenhuma mensagem" for empty messages', () => {
+    it('should show "No messages" for empty messages', () => {
       render(<ChatLayout messages={[]} />);
-      expect(screen.getByText('Nenhuma mensagem encontrada.')).toBeDefined();
-   });
+       expect(screen.getByText('No messages found.')).toBeDefined();
+    });
 
    it('should render system messages', () => {
       const msgs: ParsedMessage[] = [{
@@ -71,7 +71,7 @@ describe('ChatLayout', () => {
 
    it('should use default title when not provided', () => {
       render(<ChatLayout messages={messages} />);
-      expect(screen.getByText('Histórico do WhatsApp')).toBeDefined();
+       expect(screen.getByText('WhatsApp History')).toBeDefined();
    });
 
    it('should render with WhatsApp background style', () => {
@@ -123,8 +123,8 @@ describe('ChatLayout', () => {
       const delMsgs: ParsedMessage[] = [
          { date: '19/08/24', time: '12:00', sender: 'Felipe', content: 'This message was deleted', type: 'deleted' },
       ];
-      render(<ChatLayout messages={delMsgs} />);
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
+       render(<ChatLayout messages={delMsgs} />);
+       expect(screen.getByText('Deleted message')).toBeDefined();
    });
 
    it('should handle only media messages', () => {
@@ -171,13 +171,13 @@ describe('ChatLayout', () => {
    it('should render input bar with all three action buttons', () => {
       render(<ChatLayout messages={messages} />);
       expect(screen.getByLabelText('Emoji')).toBeDefined();
-      expect(screen.getByLabelText('Anexar')).toBeDefined();
-      expect(screen.getByLabelText('Enviar')).toBeDefined();
-   });
+       expect(screen.getByLabelText('Attach')).toBeDefined();
+       expect(screen.getByLabelText('Send')).toBeDefined();
+    });
 
-   it('should render input bar text placeholder', () => {
-      render(<ChatLayout messages={messages} />);
-      expect(screen.getByText('Digite uma mensagem')).toBeDefined();
+    it('should render input bar text placeholder', () => {
+       render(<ChatLayout messages={messages} />);
+       expect(screen.getByText('Type a message')).toBeDefined();
    });
 
    it('should render custom title and pass it to header', () => {
@@ -227,17 +227,17 @@ describe('ChatLayout', () => {
          { date: '19/08/24', time: '10:00', sender: 'Felipe', content: 'This message was deleted', type: 'deleted' },
          { date: '19/08/24', time: '10:01', sender: 'João', content: 'You deleted this message', type: 'deleted' },
       ];
-      render(<ChatLayout messages={delMsgs} />);
-      const deleted = screen.getAllByText('Mensagem apagada');
-      expect(deleted).toHaveLength(2);
+       render(<ChatLayout messages={delMsgs} />);
+       const deleted = screen.getAllByText('Deleted message');
+       expect(deleted).toHaveLength(2);
    });
 
    it('should render input bar with all buttons and placeholder', () => {
       render(<ChatLayout messages={messages} />);
-      expect(screen.getByLabelText('Emoji')).toBeDefined();
-      expect(screen.getByLabelText('Anexar')).toBeDefined();
-      expect(screen.getByLabelText('Enviar')).toBeDefined();
-      expect(screen.getByText('Digite uma mensagem')).toBeDefined();
+       expect(screen.getByLabelText('Emoji')).toBeDefined();
+       expect(screen.getByLabelText('Attach')).toBeDefined();
+       expect(screen.getByLabelText('Send')).toBeDefined();
+       expect(screen.getByText('Type a message')).toBeDefined();
    });
 
    it('should render with many different senders', () => {

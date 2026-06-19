@@ -25,12 +25,12 @@ describe('ChatHeader', () => {
 
    it('should render default title when not provided', () => {
       render(<ChatHeader />);
-      expect(screen.getByText('Histórico do WhatsApp')).toBeDefined();
-   });
+       expect(screen.getByText('WhatsApp History')).toBeDefined();
+    });
 
-   it('should default title show HD initials', () => {
-      render(<ChatHeader />);
-      expect(screen.getByText('HD')).toBeDefined();
+    it('should default title show WH initials', () => {
+       render(<ChatHeader />);
+       expect(screen.getByText('WH')).toBeDefined();
    });
 
    it('should render search icon', () => {

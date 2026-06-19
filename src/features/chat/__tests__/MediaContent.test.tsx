@@ -27,12 +27,12 @@ describe('MediaContent', () => {
 
    it('should render deleted message', () => {
       render(<MediaContent type="deleted" content="This message was deleted" />);
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
-   });
+       expect(screen.getByText('Deleted message')).toBeDefined();
+    });
 
-   it('should render media omitted', () => {
+    it('should render media omitted', () => {
       render(<MediaContent type="media" content="<Media omitted>" />);
-      expect(screen.getByText('Mídia não exportada ou indisponível')).toBeDefined();
+       expect(screen.getByText('Media not exported or unavailable')).toBeDefined();
    });
 
    it('should render image for jpg files', () => {
@@ -40,12 +40,12 @@ describe('MediaContent', () => {
       expect(container.querySelector('img')).not.toBeNull();
    });
 
-   it('should render download link for generic files', () => {
-      render(<MediaContent type="media" content="document.pdf" />);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
-   });
+    it('should render download link for generic files', () => {
+       render(<MediaContent type="media" content="document.pdf" />);
+       expect(screen.getByText('Download file')).toBeDefined();
+    });
 
-   it('should render audio for opus files', () => {
+    it('should render audio for opus files', () => {
       const { container } = render(<MediaContent type="media" content="audio.opus" />);
       expect(container.querySelector('audio')).not.toBeNull();
    });
@@ -55,9 +55,9 @@ describe('MediaContent', () => {
       expect(container.querySelector('video')).not.toBeNull();
    });
 
-   it('should render contact info for vcf files', () => {
-      render(<MediaContent type="media" content="contact.vcf" />);
-      expect(screen.getByText('Contato disponível:')).toBeDefined();
+    it('should render contact info for vcf files', () => {
+       render(<MediaContent type="media" content="contact.vcf" />);
+       expect(screen.getByText('Contact available:')).toBeDefined();
    });
 
    it('should display formatted message with strikethrough', () => {
@@ -85,9 +85,9 @@ describe('MediaContent', () => {
       expect(container.querySelector('img')).not.toBeNull();
    });
 
-   it('should render download link for unknown file extension', () => {
-      render(<MediaContent type="media" content="file.xyz" />);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
+    it('should render download link for unknown file extension', () => {
+       render(<MediaContent type="media" content="file.xyz" />);
+       expect(screen.getByText('Download file')).toBeDefined();
    });
 
    it('should handle file attached suffix with image', () => {
@@ -100,12 +100,12 @@ describe('MediaContent', () => {
       expect(container.querySelector('video')).not.toBeNull();
    });
 
-   it('should handle file attached suffix with unknown type', () => {
-      render(<MediaContent type="media" content="file.xyz (file attached)" />);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
-   });
+    it('should handle file attached suffix with unknown type', () => {
+       render(<MediaContent type="media" content="file.xyz (file attached)" />);
+       expect(screen.getByText('Download file')).toBeDefined();
+    });
 
-   it('should render audio element with controls attribute', () => {
+    it('should render audio element with controls attribute', () => {
       const { container } = render(<MediaContent type="media" content="audio.opus" />);
       const audio = container.querySelector('audio');
       expect(audio).not.toBeNull();
@@ -153,22 +153,22 @@ describe('MediaContent', () => {
       expect(container.textContent).toBe('');
    });
 
-   it('should render deleted message with empty content string', () => {
-      render(<MediaContent type="deleted" content="" />);
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
-   });
+    it('should render deleted message with empty content string', () => {
+       render(<MediaContent type="deleted" content="" />);
+       expect(screen.getByText('Deleted message')).toBeDefined();
+    });
 
-   it('should render contact type with vcf file', () => {
-      render(<MediaContent type="contact" content="contact.vcf" />);
-      expect(screen.getByText('Contato disponível:')).toBeDefined();
-   });
+    it('should render contact type with vcf file', () => {
+       render(<MediaContent type="contact" content="contact.vcf" />);
+       expect(screen.getByText('Contact available:')).toBeDefined();
+    });
 
-   it('should render download link for media type with file attached', () => {
-      render(<MediaContent type="media" content="file.xyz (file attached)" />);
-      expect(screen.getByText('Baixar arquivo')).toBeDefined();
-   });
+    it('should render download link for media type with file attached', () => {
+       render(<MediaContent type="media" content="file.xyz (file attached)" />);
+       expect(screen.getByText('Download file')).toBeDefined();
+    });
 
-   it('should render system type content as formatted text', () => {
+    it('should render system type content as formatted text', () => {
       const { container } = render(<MediaContent type="system" content="System *message*" />);
       expect(container.textContent).toContain('System');
    });
@@ -207,9 +207,9 @@ describe('MediaContent', () => {
       expect(container.querySelector('img')).not.toBeNull();
    });
 
-   it('should render strikethrough for deleted type message', () => {
-      render(<MediaContent type="deleted" content="This message was deleted" />);
-      const el = screen.getByText('Mensagem apagada');
-      expect(el.className).toContain('line-through');
-   });
+    it('should render strikethrough for deleted type message', () => {
+       render(<MediaContent type="deleted" content="This message was deleted" />);
+       const el = screen.getByText('Deleted message');
+       expect(el.className).toContain('line-through');
+    });
 });

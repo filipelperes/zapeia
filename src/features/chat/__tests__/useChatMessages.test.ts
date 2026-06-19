@@ -281,18 +281,18 @@ describe('useChatMessages', () => {
    });
 
    it('should handle AbortError like any other error', async () => {
-      // DOMException is not instanceof Error in jsdom, so the hook wraps it with "Erro desconhecido"
-      const abortError = new DOMException('The operation was aborted', 'AbortError');
-      mockFetch.mockRejectedValueOnce(abortError);
+      // DOMException is not instanceof Error in jsdom, so the hook wraps it with "Unknown error"
+       const abortError = new DOMException('The operation was aborted', 'AbortError');
+       mockFetch.mockRejectedValueOnce(abortError);
 
-      const { result } = renderHook(() => useChatMessages('/test.txt'));
+       const { result } = renderHook(() => useChatMessages('/test.txt'));
 
-      await waitFor(() => expect(result.current.isLoading).toBe(false));
+       await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-      expect(result.current.messages).toEqual([]);
-      // DOMException is not instanceof Error in jsdom → falls to "Erro desconhecido"
-      expect(result.current.error).toBeDefined();
-      expect(result.current.error?.message).toBe('Erro desconhecido');
+       expect(result.current.messages).toEqual([]);
+       // DOMException is not instanceof Error in jsdom → falls to "Unknown error"
+       expect(result.current.error).toBeDefined();
+       expect(result.current.error?.message).toBe('Unknown error');
    });
 
    it('should handle HTTP 500 server error', async () => {
@@ -334,10 +334,10 @@ describe('useChatMessages', () => {
       await waitFor(() => expect(result.current.isLoading).toBe(false));
 
       expect(result.current.error).toBeDefined();
-      expect(result.current.error?.message).toBe('Erro desconhecido');
-   });
+       expect(result.current.error?.message).toBe('Unknown error');
+    });
 
-   it('should handle consecutive errors', async () => {
+    it('should handle consecutive errors', async () => {
       mockFetch
          .mockRejectedValueOnce(new Error('First error'))
          .mockRejectedValueOnce(new Error('Second error'));

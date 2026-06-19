@@ -68,9 +68,9 @@ describe('MessageList', () => {
       const msgs: ParsedMessage[] = [
          { date: '19/08/24', time: '12:00', sender: 'Felipe', content: 'This message was deleted', type: 'deleted' },
       ];
-      render(<MessageList messages={msgs} />);
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
-   });
+       render(<MessageList messages={msgs} />);
+       expect(screen.getByText('Deleted message')).toBeDefined();
+    });
 
    it('should handle media messages in list', () => {
       const msgs: ParsedMessage[] = [
@@ -92,10 +92,7 @@ describe('MessageList', () => {
          { date: '19/08/24', time: '09:29', sender: 'Felipe', content: 'Msg 2', type: 'message' },
          { date: '19/08/24', time: '09:30', sender: 'Felipe', content: 'Msg 3', type: 'message' },
       ];
-      const { container } = render(<MessageList messages={sameDayMessages} />);
-      // Find all date separators (text elements with dates)
-      const textContent = container.textContent || '';
-      // Should only have one date separator (for the first message)
+      render(<MessageList messages={sameDayMessages} />);
       expect(screen.getByText('Msg 1')).toBeDefined();
       expect(screen.getByText('Msg 2')).toBeDefined();
    });
@@ -172,10 +169,10 @@ describe('MessageList', () => {
          { date: '19/08/24', time: '09:01', sender: 'João', content: 'This message was deleted', type: 'deleted' },
          { date: '19/08/24', time: '09:02', sender: 'Felipe', content: 'Third', type: 'message' },
       ];
-      render(<MessageList messages={withDeleted} />);
-      expect(screen.getByText('First')).toBeDefined();
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
-      expect(screen.getByText('Third')).toBeDefined();
+       render(<MessageList messages={withDeleted} />);
+       expect(screen.getByText('First')).toBeDefined();
+       expect(screen.getByText('Deleted message')).toBeDefined();
+       expect(screen.getByText('Third')).toBeDefined();
    });
 
    it('should render messages in correct chronological order', () => {
@@ -213,8 +210,8 @@ describe('MessageList', () => {
       ];
       render(<MessageList messages={allTypes} />);
       expect(screen.getByText('Text')).toBeDefined();
-      expect(screen.getByText('System msg')).toBeDefined();
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
+       expect(screen.getByText('System msg')).toBeDefined();
+       expect(screen.getByText('Deleted message')).toBeDefined();
    });
 
    it('should not crash when message has empty content', () => {
@@ -308,9 +305,9 @@ describe('MessageList', () => {
          { date: '19/08/24', time: '09:05', sender: 'Pedro', content: 'clip.mp4', type: 'video' },
       ];
       const { container } = render(<MessageList messages={allTypes} />);
-      expect(container.textContent).toContain('Text');
-      expect(screen.getByText('Mensagem apagada')).toBeDefined();
-      expect(container.querySelector('img')).not.toBeNull();
+       expect(container.textContent).toContain('Text');
+       expect(screen.getByText('Deleted message')).toBeDefined();
+       expect(container.querySelector('img')).not.toBeNull();
       expect(container.querySelector('audio')).not.toBeNull();
       expect(container.querySelector('video')).not.toBeNull();
    });
@@ -354,7 +351,7 @@ describe('MessageList', () => {
          date: '19/08/24', time: '09:00', sender: 'Felipe',
          content: 'contact.vcf', type: 'contact',
       }];
-      render(<MessageList messages={contactMsgs} />);
-      expect(screen.getByText('Contato disponível:')).toBeDefined();
+       render(<MessageList messages={contactMsgs} />);
+       expect(screen.getByText('Contact available:')).toBeDefined();
    });
 });

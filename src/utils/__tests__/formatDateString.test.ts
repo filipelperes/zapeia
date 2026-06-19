@@ -69,15 +69,15 @@ describe('formatDateString', () => {
       expect(result).toContain('2025');
    });
 
-   it('should format with different hours and minutes', () => {
-      const result = formatDateString('19/08/24', '23:59');
-      expect(result).toContain('23:59');
-   });
+    it('should format with different hours and minutes', () => {
+       const result = formatDateString('19/08/24', '23:59');
+       expect(result).toContain('11:59 PM');
+    });
 
-   it('should format midnight time', () => {
-      const result = formatDateString('19/08/24', '00:00');
-      expect(result).toContain('00:00');
-   });
+    it('should format midnight time', () => {
+       const result = formatDateString('19/08/24', '00:00');
+       expect(result).toContain('12:00 AM');
+    });
 
    it('should handle AM time', () => {
       const result = formatDateString('19/08/24', '12:00 AM');
@@ -151,20 +151,20 @@ describe('formatDateString', () => {
       expect(result).toContain('12:00');
    });
 
-   it('should format midnight AM 12:00 AM', () => {
-      const result = formatDateString('19/08/24', '12:00 AM');
-      expect(result).toContain('00:00');
-   });
+    it('should format midnight AM 12:00 AM', () => {
+       const result = formatDateString('19/08/24', '12:00 AM');
+       expect(result).toContain('12:00 AM');
+    });
 
    it('should format early morning 01:01', () => {
       const result = formatDateString('19/08/24', '01:01');
       expect(result).toContain('01:01');
    });
 
-   it('should format afternoon 13:01', () => {
-      const result = formatDateString('19/08/24', '13:01');
-      expect(result).toContain('13:01');
-   });
+    it('should format afternoon 13:01', () => {
+       const result = formatDateString('19/08/24', '13:01');
+       expect(result).toContain('01:01 PM');
+    });
 
    // --- Edge case dates ---
 
@@ -221,10 +221,10 @@ describe('formatDateString', () => {
       expect(result).toContain('2024');
    });
 
-   it('should format dd/MM/yy h:mm a with 11:59 PM boundary', () => {
-      const result = formatDateString('19/08/24', '11:59 PM');
-      expect(result).toContain('23:59');
-   });
+    it('should format dd/MM/yy h:mm a with 11:59 PM boundary', () => {
+       const result = formatDateString('19/08/24', '11:59 PM');
+       expect(result).toContain('11:59 PM');
+    });
 
    // --- Various invalid inputs ---
 
@@ -326,8 +326,8 @@ describe('formatDateString', () => {
       expect(result).toBe('09:28');
    });
 
-   it('should format d/M/yy with time 00:00', () => {
-      const result = formatDateString('1/1/24', '00:00');
-      expect(result).toContain('00:00');
-   });
+    it('should format d/M/yy with time 00:00', () => {
+       const result = formatDateString('1/1/24', '00:00');
+       expect(result).toContain('12:00 AM');
+    });
 });
