@@ -1,21 +1,21 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/filipelperes/zapeia/main/public/favicon.svg" alt="Zapeia" width="80" />
   <h1>Zapeia</h1>
-  <p><strong>Visualizador elegante de conversas exportadas do WhatsApp</strong></p>
+  <p><strong>Elegant viewer for exported WhatsApp conversations</strong></p>
 </div>
 
 <br/>
 
-## Sobre
+## About
 
-O **Zapeia** é um visualizador web moderno para conversas exportadas do WhatsApp. Basta exportar a conversa pelo próprio WhatsApp, montar o arquivo como volume, e o Zapeia renderiza tudo com uma interface fiel ao estilo do WhatsApp Web.
+**Zapeia** is a modern web viewer for exported WhatsApp conversations. Simply export the chat from WhatsApp, mount the file as a volume, and Zapeia renders everything with a UI faithful to the WhatsApp Web style.
 
-## Como Usar
+## How to Use
 
 ```bash
-# 1. Exporte a conversa no WhatsApp (⋮ > Mais > Exportar conversa)
-# 2. Coloque o arquivo no diretório atual como chat.txt
-# 3. Rode o container
+# 1. Export the chat in WhatsApp (⋮ > More > Export chat)
+# 2. Place the file in the current directory as chat.txt
+# 3. Run the container
 
 docker run -d \
   --name zapeia \
@@ -24,14 +24,14 @@ docker run -d \
   -v ./media:/usr/share/nginx/html/media \
   filipelperes/zapeia
 
-# Acesse: http://localhost:5174
+# Access: http://localhost:5174
 ```
 
-> 🔄 **Auto-detecção**: O app detecta automaticamente quando o `chat.txt` é adicionado ou substituído — sem restart, sem rebuild.
+> 🔄 **Auto-detection**: The app automatically detects when `chat.txt` is added or replaced — no restart, no rebuild.
 
-## Mídias Suportadas
+## Supported Media
 
-Se sua conversa foi exportada **com mídia**, extraia o `.zip` e monte a pasta:
+If your chat was exported **with media**, extract the `.zip` and mount the folder:
 
 ```bash
 unzip "_chat.txt.zip" -d /tmp/whatsapp-export
@@ -43,12 +43,12 @@ docker run -d \
   filipelperes/zapeia
 ```
 
-| Tipo | Extensões |
+| Type | Extensions |
 |---|---|
-| 🖼️ Imagem | `.jpg`, `.jpeg`, `.png`, `.webp` |
-| 🎬 Vídeo | `.mp4` |
-| 🎵 Áudio | `.opus` |
-| 👤 Contato | `.vcf` |
+| 🖼️ Image | `.jpg`, `.jpeg`, `.png`, `.webp` |
+| 🎬 Video | `.mp4` |
+| 🎵 Audio | `.opus` |
+| 👤 Contact | `.vcf` |
 
 ## Docker Compose
 
@@ -65,22 +65,24 @@ services:
     restart: unless-stopped
 ```
 
-## Funcionalidades
+## Features
 
-- 🗨️ Renderização fiel de conversas do WhatsApp
-- 🎨 Temas Claro/Escuro
-- 🔍 Busca instantânea por texto
-- 🖼️ Exibição de imagens, vídeos, áudios e contatos
-- 💬 Bolhas de mensagem estilo WhatsApp
-- 👤 Identificação do seu nome nas mensagens
-- 📅 Separadores de data
-- ⚡ Cache local (localStorage)
-- 🔄 Auto-detecção do arquivo de conversa
+- 🗨️ Faithful rendering of WhatsApp conversations
+- 🌐 Internationalization (English / Brazilian Portuguese)
+- 📅 User-selectable date/time format locale (decoupled from UI language)
+- 🎨 Light/Dark themes
+- 🔍 Instant text search
+- 🖼️ Display images, videos, audio, and contacts
+- 💬 WhatsApp-style message bubbles
+- 👤 Your name identified in messages
+- 📅 Date separators
+- ⚡ Local cache (localStorage)
+- 🔄 Auto-detection of chat file
 
 ## Stack
 
-React 19 · TypeScript 6 · Vite 8 · Tailwind CSS 4 · Nginx Alpine
+React 19 · TypeScript 6 · Vite 8 · Tailwind CSS 4 · i18next · Nginx Alpine
 
-## Repositório
+## Repository
 
 GitHub: [github.com/filipelperes/zapeia](https://github.com/filipelperes/zapeia)

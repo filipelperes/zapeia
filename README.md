@@ -3,9 +3,9 @@
     <img src="public/favicon.svg" alt="Zapeia logo" width="80" />
   </a>
   <h1>Zapeia</h1>
-  <p><strong>Visualizador de Conversas Exportadas do WhatsApp</strong></p>
+  <p><strong>A Viewer for Exported WhatsApp Conversations</strong></p>
   <p>
-    <em>"Zap" + "passeia" — Navegue pelas suas conversas do Zap.</em>
+    <em>"Zap" + "passeia" — Browse through your WhatsApp chats.</em>
   </p>
   <p>
     <a href="https://hub.docker.com/r/filipelperes/zapeia">
@@ -50,118 +50,119 @@
 
 ---
 
-## 🧭 Sobre
+## 🧭 About
 
-**Zapeia** é um visualizador web moderno e elegante para conversas exportadas do WhatsApp. Basta exportar a conversa pelo próprio WhatsApp, copiar o arquivo para o projeto, e o Zapeia renderiza tudo com uma interface fiel ao estilo do WhatsApp Web — formatação de texto, imagens, vídeos, áudios, contatos e muito mais.
+**Zapeia** is a modern, elegant web viewer for exported WhatsApp conversations. Simply export the conversation from WhatsApp, copy the file into the project, and Zapeia renders everything with an interface true to the WhatsApp Web style — text formatting, images, videos, audio, contacts, and more.
 
-O nome é um trocadilho entre **Zap** (apelido do WhatsApp) e **passeia** (navegar, explorar) — uma ferramenta para "passear" pelas conversas.
+The name is a pun on **Zap** (a nickname for WhatsApp) and **passeia** (Portuguese for "browse" or "stroll") — a tool for browsing through your chats.
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Features
 
-| Funcionalidade | Descrição |
+| Feature | Description |
 |---|---|
-| 🗨️ **Visualização de conversas** | Renderiza arquivos de exportação `.txt` do WhatsApp com formatação completa |
-| 🎨 **Temas Claro/Escuro** | Alterna entre os modos claro e escuro com um clique |
-| 🔍 **Pesquisa nas mensagens** | Busca instantânea por qualquer texto na conversa |
-| 🖼️ **Mídia incorporada** | Exibe imagens, vídeos, áudios e contatos diretamente no chat |
-| 🖱️ **Lightbox de imagens** | Clique em imagens para visualizar em tela cheia |
-| 💬 **Bolhas de mensagem** | Estilo WhatsApp com bolhas próprias e de terceiros |
-| 👤 **Identificação do usuário** | Configure seu nome para destacar suas mensagens |
-| 📅 **Separadores de data** | Organização visual por dia |
-| ✏️ **Texto formatado** | Suporte a negrito, itálico, riscado e monoespaçado do WhatsApp |
-| 📱 **Responsivo** | Layout adaptável para desktop e mobile |
-| ⚡ **Cache local** | Carregamento instantâneo em visitas repetidas |
-| 🔄 **Auto-detecção** | Detecta automaticamente quando o arquivo de conversa é adicionado |
-| 🐳 **Containerizado** | Docker multi-stage com Nginx — imagem de ~25MB pronta para deploy |
+| 🗨️ **Conversation viewer** | Renders WhatsApp `.txt` export files with full formatting |
+| 🎨 **Light/Dark themes** | Switch between light and dark modes with a single click |
+| 🔍 **Message search** | Instantly search for any text in the conversation |
+| 🖼️ **Embedded media** | Displays images, videos, audio, and contacts directly in the chat |
+| 🖱️ **Image lightbox** | Click images to view them full-screen |
+| 💬 **Message bubbles** | WhatsApp-style own and others' message bubbles |
+| 👤 **User identification** | Set your name to highlight your own messages |
+| 📅 **Date separators** | Visual organization by day |
+| ✏️ **Formatted text** | Supports WhatsApp bold, italic, strikethrough, and monospace |
+| 📱 **Responsive** | Adaptive layout for desktop and mobile |
+| ⚡ **Local cache** | Instant loading on repeat visits |
+| 🔄 **Auto-detection** | Automatically detects when the conversation file is added |
+| 🌐 **Internationalization** | UI in English or Portuguese — date/time format locale independently selectable by each user |
+| 🐳 **Containerized** | Multi-stage Docker with Nginx — ~25MB image ready for deployment |
 
 ---
 
-## 🏠 Self-Hosted — Guia de Configuração
+## 🏠 Self-Hosted — Setup Guide
 
-O Zapeia foi feito para rodar localmente (self-hosted). Nenhuma conversa é incluída no repositório — você deve fornecer seus próprios arquivos de exportação.
+Zapeia is designed to run locally (self-hosted). No conversations are included in the repository — you must provide your own export files.
 
-### 1. Exporte a conversa do WhatsApp
+### 1. Export the conversation from WhatsApp
 
-No WhatsApp (mobile ou desktop):
+On WhatsApp (mobile or desktop):
 
-1. Abra o grupo ou conversa desejada
-2. Toque nos **três pontos** (⋮) → **Mais** → **Exportar conversa**
-3. Escolha **Sem mídia** (o arquivo .txt)
-4. O WhatsApp vai gerar um arquivo `.txt` com todo o histórico da conversa
+1. Open the desired group or conversation
+2. Tap the **three dots** (⋮) → **More** → **Export chat**
+3. Choose **Without media** (the .txt file)
+4. WhatsApp will generate a `.txt` file with the full conversation history
 
-> 💡 Se quiser exibir também as fotos, vídeos e áudios, escolha **Com mídia** na exportação — mas atenção: o arquivo .zip gerado pode ser grande. Você precisará extrair as mídias para a pasta correta (veja passo 3).
+> 💡 If you also want to display photos, videos, and audio, choose **With media** when exporting — but be aware the generated .zip file may be large. You'll need to extract the media files to the correct folder (see step 3).
 
-### 2. Coloque o arquivo no projeto
+### 2. Place the file in the project
 
-Copie o arquivo `.txt` exportado para a pasta `public/` do projeto:
+Copy the exported `.txt` file to the project's `public/` folder:
 
 ```bash
-# O arquivo DEVE se chamar chat.txt
-cp /caminho/para/sua-conversa.txt public/chat.txt
+# The file MUST be named chat.txt
+cp /path/to/your-conversation.txt public/chat.txt
 ```
 
-### 3. (Opcional) Adicione as mídias
+### 3. (Optional) Add the media files
 
-Se você exportou a conversa **com mídia**, extraia o `.zip` e copie todos os arquivos de mídia (imagens, vídeos, áudios, contatos) para `public/media/`:
+If you exported the conversation **with media**, extract the `.zip` and copy all media files (images, videos, audio, contacts) to `public/media/`:
 
 ```bash
-# Extraia o zip e copie as mídias
+# Extract the zip and copy the media files
 unzip "_chat.txt.zip" -d /tmp/whatsapp-export
 cp /tmp/whatsapp-export/media/* public/media/
 ```
 
-O Zapeia reconhece automaticamente os seguintes tipos de mídia:
+Zapeia automatically recognizes the following media types:
 
-| Tipo | Extensões |
+| Type | Extensions |
 |---|---|
-| 🖼️ Imagem | `.jpg`, `.jpeg`, `.png`, `.webp` |
-| 🎬 Vídeo | `.mp4` |
-| 🎵 Áudio | `.opus` |
-| 👤 Contato | `.vcf` |
+| 🖼️ Image | `.jpg`, `.jpeg`, `.png`, `.webp` |
+| 🎬 Video | `.mp4` |
+| 🎵 Audio | `.opus` |
+| 👤 Contact | `.vcf` |
 
-### 4. Inicie o servidor de desenvolvimento
+### 4. Start the development server
 
 ```bash
 npm run dev
 ```
 
-Assim que o arquivo `public/chat.txt` for detectado, o Zapeia carregará automaticamente a conversa e exibirá as mensagens.
+As soon as the `public/chat.txt` file is detected, Zapeia will automatically load the conversation and display the messages.
 
-> 🔄 **Auto-detecção**: Se você ainda não copiou o `chat.txt`, o Zapeia exibirá uma tela de boas-vindas com instruções e ficará observando a pasta. Assim que o arquivo for adicionado, a conversa será carregada automaticamente — sem necessidade de recarregar a página.
+> 🔄 **Auto-detection**: If you haven't copied `chat.txt` yet, Zapeia will display a welcome screen with instructions and keep watching the folder. Once the file is added, the conversation will load automatically — no page reload needed.
 
-### 5. Build de produção (para deploy)
+### 5. Production build (for deployment)
 
-Se quiser fazer deploy em um servidor estático:
+If you want to deploy to a static server:
 
 ```bash
 npm run build
 ```
 
-Copie o conteúdo da pasta `dist/` para seu servidor web. **Lembre-se de colocar o `chat.txt` e as mídias dentro do diretório servido**, nos mesmos caminhos esperados pelo app.
+Copy the contents of the `dist/` folder to your web server. **Make sure to place `chat.txt` and the media files inside the served directory**, at the same paths the app expects.
 
-### 6. (Alternativa) Docker — self-hosted em 2 comandos
+### 6. (Alternative) Docker — self-hosted in 2 commands
 
-O Zapeia oferece suporte a Docker com build multi-stage. Tudo que você precisa é o Docker instalado.
+Zapeia offers Docker support with a multi-stage build. All you need is Docker installed.
 
 ```bash
-# 1. Copie sua conversa para o diretório do projeto
-cp /caminho/para/sua-conversa.txt ./chat.txt
+# 1. Copy your conversation to the project directory
+cp /path/to/your-conversation.txt ./chat.txt
 
-# 2. (Opcional) Extraia e copie as mídias
+# 2. (Optional) Extract and copy media files
 unzip "_chat.txt.zip" -d /tmp/whatsapp-export
 cp -r /tmp/whatsapp-export/media/* ./media/
 
-# 3. Build + Start com Docker Compose
+# 3. Build + Start with Docker Compose
 docker compose up -d
 
-# 4. Acesse http://localhost:5174 🎉
+# 4. Access http://localhost:5174 🎉
 ```
 
-> 🔄 **Auto-detecção**: O polling de 5s funciona normalmente com o bind mount. Basta substituir o `./chat.txt` no host que o Zapeia detecta automaticamente — sem rebuild, sem restart do container.
+> 🔄 **Auto-detection**: The 5-second polling works normally with the bind mount. Just replace `./chat.txt` on the host and Zapeia detects it automatically — no rebuild, no container restart needed.
 
-#### Build manual da imagem
+#### Manual image build
 
 ```bash
 docker build -t zapeia:latest .
@@ -173,77 +174,77 @@ docker run -d \
   zapeia:latest
 ```
 
-#### Arquitetura do container
+#### Container architecture
 
 ```
 ┌────────────────────────────────────────────┐
 │          nginx:alpine (~25MB)              │
 │                                            │
 │  /usr/share/nginx/html/                    │
-│  ├── index.html          (build do Vite)   │
-│  ├── assets/             (JS + CSS com     │
-│  │                        hash, cache 1y)  │
-│  ├── chat.txt ← bind mount do usuário      │
-│  └── media/   ← bind mount do usuário      │
+│  ├── index.html          (Vite build)      │
+│  ├── assets/             (JS + CSS with    │
+│  │                        hash, 1y cache)  │
+│  ├── chat.txt ← user bind mount            │
+│  └── media/   ← user bind mount            │
 └────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🤖 CI/CD — Publicação automática no Docker Hub
+## 🤖 CI/CD — Automatic publishing to Docker Hub
 
-Sempre que houver um **push na branch `main`** ou a criação de uma **tag `v*`** (ex: `v0.2.0`), o GitHub Actions:
+Whenever there's a **push to the `main` branch** or the creation of a **`v*` tag** (e.g. `v0.2.0`), GitHub Actions:
 
-1. Faz checkout do repositório
-2. Faz login no Docker Hub (via `DOCKER_USERNAME`/`DOCKER_PASSWORD`)
-3. Extrai tags e labels automáticas (`latest`, `0.1.0`, `0.1`, etc.)
-4. Builda e publica a imagem em **`filipelperes/zapeia`**
+1. Checks out the repository
+2. Logs in to Docker Hub (via `DOCKER_USERNAME`/`DOCKER_PASSWORD`)
+3. Extracts automatic tags and labels (`latest`, `0.1.0`, `0.1`, etc.)
+4. Builds and publishes the image to **`filipelperes/zapeia`**
 
-### Tags geradas automaticamente
+### Automatically generated tags
 
-| Evento | Tags |
+| Event | Tags |
 |---|---|
-| Push na `main` | `latest` |
+| Push to `main` | `latest` |
 | Tag `v0.2.0` | `0.2.0`, `0.2` |
 | Tag `v1.0.0` | `1.0.0`, `1.0` |
 
-> 💡 Também é possível disparar o workflow manualmente pelo GitHub UI na aba **Actions** → **Publish Docker image** → **Run workflow**.
+> 💡 You can also trigger the workflow manually from the GitHub UI under the **Actions** tab → **Publish Docker image** → **Run workflow**.
 
-### Configuração necessária (uma vez)
+### Required setup (one-time)
 
-Adicione estes **segredos** no repositório em `Settings > Secrets and variables > Actions`:
+Add these **secrets** to the repository under `Settings > Secrets and variables > Actions`:
 
-| Nome | Valor |
+| Name | Value |
 |---|---|
 | `DOCKER_USERNAME` | `filipelperes` |
-| `DOCKER_PASSWORD` | Um [token de acesso](https://hub.docker.com/settings/security) do Docker Hub (não a senha da conta) |
+| `DOCKER_PASSWORD` | An [access token](https://hub.docker.com/settings/security) from Docker Hub (not your account password) |
 
 ---
 
-## 🔧 A tela de boas-vindas (primeiro acesso)
+## 🔧 The welcome screen (first access)
 
-Quando o Zapeia é aberto sem um `public/chat.txt` configurado, ele exibe uma tela intuitiva de boas-vindas que:
+When Zapeia is opened without a `public/chat.txt` configured, it displays an intuitive welcome screen that:
 
-- Mostra o logo e o propósito do Zapeia
-- Lista os 3 passos para configurar sua conversa
-- Exibe um indicador animado que mostra que o app está monitorando a pasta
-- Atualiza automaticamente assim que o arquivo `chat.txt` é detectado
+- Shows the Zapeia logo and purpose
+- Lists the 3 steps to set up your conversation
+- Displays an animated indicator showing the app is monitoring the folder
+- Updates automatically as soon as the `chat.txt` file is detected
 
-Isso permite que você faça o deploy do Zapeia sem dados de exemplo e configure sua conversa depois, sem precisar de deploy ou rebuild.
+This allows you to deploy Zapeia without any sample data and configure your conversation later, with no need for redeployment or rebuilding.
 
 ---
 
-## 🚀 Instalação
+## 🚀 Installation
 
-### Pré-requisitos
+### Prerequisites
 
-**Sem Docker:**
+**Without Docker:**
 - Node.js >= 18
-- npm, pnpm ou yarn
+- npm, pnpm, or yarn
 
-**Com Docker (alternativa):**
-- [Docker](https://docs.docker.com/engine/install/) (qualquer versão recente)
-- Docker Compose (já incluso no Docker Desktop)
+**With Docker (alternative):**
+- [Docker](https://docs.docker.com/engine/install/) (any recent version)
+- Docker Compose (already included in Docker Desktop)
 
 ```bash
 git clone https://github.com/filipelperes/zapeia.git
@@ -251,157 +252,179 @@ cd zapeia
 npm install
 ```
 
-### Comandos úteis
+### Useful commands
 
-| Comando | Descrição |
-|---|---|---|
-| `npm run dev` | Inicia servidor de desenvolvimento com hot-reload |
-| `npm run build` | Compila para produção em `dist/` |
-| `npm run preview` | Serve a build de produção localmente |
-| `npm test` | Executa testes em modo watch |
-| `npm run test:run` | Executa testes uma vez |
-| `npm run test:coverage` | Executa testes com cobertura |
-| `npm run lint` | Verifica o código com ESLint |
-| `docker compose up -d` | Build + start do container em background |
-| `docker compose down` | Para e remove o container |
-| `docker compose logs -f` | Acompanha os logs do container |
-| `docker build -t zapeia .` | Build manual da imagem Docker |
+| Command | Description |
+|---|---|
+| `npm run dev` | Starts the development server with hot-reload |
+| `npm run build` | Compiles for production into `dist/` |
+| `npm run preview` | Serves the production build locally |
+| `npm test` | Runs tests in watch mode |
+| `npm run test:run` | Runs tests once |
+| `npm run test:coverage` | Runs tests with coverage |
+| `npm run lint` | Lints the code with ESLint |
+| `docker compose up -d` | Build + start the container in background |
+| `docker compose down` | Stops and removes the container |
+| `docker compose logs -f` | Follows the container logs |
+| `docker build -t zapeia .` | Manual Docker image build |
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 src/
-├── app/                      # Componente raiz da aplicação
+├── app/                      # Application root component
 │   └── index.tsx
-├── features/                 # Módulos por domínio (Bulletproof React)
-│   └── chat/                 # Feature principal: visualização do chat
-│       ├── components/       #   Subcomponentes do chat
-│       │   ├── ChatBubble/   #     Bolha de mensagem individual
-│       │   ├── ChatHeader/   #     Cabeçalho com avatar, título e ações
-│       │   ├── ChatLayout/   #     Layout principal do chat
-│       │   ├── DateSeparator/#     Separador de data entre mensagens
-│       │   ├── EmptyState/   #     Tela de boas-vindas (sem chat.txt)
-│       │   ├── ErrorDisplay/ #     Tela de erro com retry
-│       │   ├── ImageLightbox/#     Modal de imagem em tela cheia
-│       │   ├── MediaContent/ #     Renderizador de mídia (img/video/audio/contact)
-│       │   ├── MessageList/  #     Lista virtualizada de mensagens
-│       │   ├── MessageTime/  #     Timestamp da mensagem
-│       │   ├── SystemMessage/#     Mensagens de sistema (entrada/saída)
-│       │   ├── ThemeToggle/  #     Botão de alternância de tema
-│       │   └── UserMenu/     #     Menu de configuração do usuário
-│       ├── hooks/            #   Hooks da feature
+├── features/                 # Domain modules (Bulletproof React)
+│   └── chat/                 # Main feature: chat viewer
+│       ├── components/       #   Chat subcomponents
+│       │   ├── ChatBubble/   #     Individual message bubble
+│       │   ├── ChatHeader/   #     Header with avatar, title, and actions
+│       │   ├── ChatLayout/   #     Main chat layout
+│       │   ├── DateSeparator/#     Date separator between messages
+│       │   ├── EmptyState/   #     Welcome screen (no chat.txt)
+│       │   ├── ErrorDisplay/ #     Error screen with retry
+│       │   ├── ImageLightbox/#     Full-screen image modal
+│       │   ├── MediaContent/ #     Media renderer (img/video/audio/contact)
+│       │   ├── MessageList/  #     Virtualized message list
+│       │   ├── MessageTime/  #     Message timestamp
+│       │   ├── SystemMessage/#     System messages (join/leave)
+│       │   ├── ThemeToggle/  #     Theme toggle button
+│       │   └── UserMenu/     #     User configuration menu
+│       ├── hooks/            #   Feature hooks
 │       │   ├── useChatMessages.ts
 │       │   ├── useSearch.ts
 │       │   ├── useTheme.ts
 │       │   └── useUserName.ts
-│       ├── types/            #   Tipos específicos do domínio
-│       └── __tests__/        #   Testes dos componentes e hooks
-├── hooks/                    # Hooks globais reutilizáveis
-├── types/                    # Tipos globais
-├── utils/                    # Funções utilitárias puras
-│   ├── chatCache.ts          #   Cache local (localStorage)
-│   ├── formatDateString.ts   #   Formatação de datas
-│   ├── formatWhatsAppText.tsx #  Renderização de formatação WhatsApp
-│   ├── parsechat.ts          #   Parsing do arquivo de chat
-│   └── renderMediaContent.tsx #  Renderização de mídia
-├── index.css                 # Estilos globais e tema
+│       ├── types/            #   Domain-specific types
+│       └── __tests__/        #   Component and hook tests
+├── hooks/                    # Reusable global hooks
+├── types/                    # Global types
+├── utils/                    # Pure utility functions
+│   ├── chatCache.ts          #   Local cache (localStorage)
+│   ├── formatDateString.ts   #   Date formatting
+│   ├── formatWhatsAppText.tsx #  WhatsApp text formatting renderer
+│   ├── parsechat.ts          #   Chat file parser
+│   └── renderMediaContent.tsx #  Media content renderer
+├── index.css                 # Global styles and theme
 ├── main.tsx                  # Entry point
-└── test-setup.ts             # Setup de testes
+└── test-setup.ts             # Test setup
 
-public/                       # Arquivos estáticos servidos pelo Vite
-├── chat.txt                  # ⚠️ Sua conversa exportada (ignorada pelo git)
-├── media/                    # ⚠️ Mídias da conversa (ignoradas pelo git)
+public/                       # Static files served by Vite
+├── chat.txt                  # ⚠️ Your exported conversation (git-ignored)
+├── media/                    # ⚠️ Conversation media files (git-ignored)
 │   └── .gitkeep
-└── favicon.svg               # Ícone do Zapeia
+└── favicon.svg               # Zapeia icon
 
-## Docker                          # Containerização (opcional)
-├── Dockerfile                 # Build multi-stage (Node → Nginx)
-├── docker-compose.yml         # Orquestração com volumes + portas
-├── nginx.conf                 # Configuração Nginx otimizada para SPA
-└── .dockerignore              # Exclusões do contexto de build
+## Docker                          # Containerization (optional)
+├── Dockerfile                 # Multi-stage build (Node → Nginx)
+├── docker-compose.yml         # Orchestration with volumes + ports
+├── nginx.conf                 # Nginx config optimized for SPA
+└── .dockerignore              # Build context exclusions
 ```
 
-### Arquitetura
+### Architecture
 
-O projeto segue o padrão **Atomic Design** combinado com **Bulletproof React**:
+The project follows **Atomic Design** combined with **Bulletproof React**:
 
-- **Atoms**: Componentes básicos e reutilizáveis
-- **Molecules**: Combinações de átomos
-- **Organisms**: Seções complexas da interface
-- **Templates**: Layouts de página
-- **Features**: Módulos autocontidos por domínio de negócio, cada um com seus próprios componentes, hooks, tipos e testes
+- **Atoms**: Basic, reusable components
+- **Molecules**: Combinations of atoms
+- **Organisms**: Complex interface sections
+- **Templates**: Page layouts
+- **Features**: Self-contained modules per business domain, each with their own components, hooks, types, and tests
 
 ---
 
-## 🧪 Stack Tecnológica
+## 🧪 Tech Stack
 
-| Tecnologia | Versão | Propósito |
+| Technology | Version | Purpose |
 |---|---|---|
-| [React](https://react.dev/) | 19 | Biblioteca de interface |
-| [TypeScript](https://www.typescriptlang.org/) | 6 | Tipagem estática |
-| [Vite](https://vite.dev/) | 8 | Build tool e dev server |
-| [Tailwind CSS](https://tailwindcss.com/) | 4 | Estilização utilitária |
-| [Vitest](https://vitest.dev/) | 4 | Testes unitários |
-| [date-fns](https://date-fns.org/) | 4 | Manipulação de datas |
-| [Testing Library](https://testing-library.com/) | — | Testes de componentes |
-| [Docker](https://www.docker.com/) | — | Containerização multi-stage |
-| [Nginx](https://nginx.org/) | Alpine | Servidor HTTP production-ready |
+| [React](https://react.dev/) | 19 | UI library |
+| [TypeScript](https://www.typescriptlang.org/) | 6 | Static typing |
+| [Vite](https://vite.dev/) | 8 | Build tool and dev server |
+| [Tailwind CSS](https://tailwindcss.com/) | 4 | Utility-first styling |
+| [Vitest](https://vitest.dev/) | 4 | Unit testing |
+| [i18next](https://www.i18next.com/) | 24 | Internationalization framework |
+| [react-i18next](https://react.i18next.com/) | 15 | React bindings for i18next |
+| [date-fns](https://date-fns.org/) | 4 | Date manipulation |
+| [Testing Library](https://testing-library.com/) | — | Component testing |
+| [Docker](https://www.docker.com/) | — | Multi-stage containerization |
+| [Nginx](https://nginx.org/) | Alpine | Production-ready HTTP server |
 
 ---
 
-## 📄 Formato do Arquivo de Chat
+## 📄 Chat File Format
 
-O Zapeia lê arquivos de exportação do WhatsApp no formato padrão:
+Zapeia reads WhatsApp export files in the standard format:
 
 ```
-DD/MM/AA, HH:MM - Nome do Remetente: Mensagem aqui
-DD/MM/AA, HH:MM - Nome do Remetente: <Media omitted>
-DD/MM/AA, HH:MM - Nome criou o grupo "Nome do Grupo"
+DD/MM/AA, HH:MM - Sender Name: Message here
+DD/MM/AA, HH:MM - Sender Name: <Media omitted>
+DD/MM/AA, HH:MM - Name created the group "Group Name"
 ```
 
-Suporta também linhas com múltiplos parágrafos e mensagens editadas (com o sufixo `<This message was edited>`).
+It also supports multi-paragraph messages and edited messages (with the `<This message was edited>` suffix).
 
 ---
 
-## ☀️🌙 Temas
+## 🌐 Internationalization
 
-O Zapeia oferece dois temas visuais:
+Zapeia supports **American English** (default) and **Brazilian Portuguese** for the entire user interface.
 
-- **Claro** — Fundo bege com bolhas verdes (estilo WhatsApp clássico)
-- **Escuro** — Fundo escuro com bolhas escuras (estilo WhatsApp Dark Mode)
+Translation keys are auto-extracted via `i18next-cli` during the build pipeline, keeping the translation files in sync with the codebase.
 
-O tema é persistido no `localStorage` e mantido entre sessões.
+### Date/Time Format — Independent Locale Selector
 
----
+The date and time format locale is **decoupled** from the UI language. Each user can independently choose how dates and times are displayed:
 
-## 🤝 Contribuindo
+- **MM/DD** or **DD/MM** format
+- **12-hour** or **24-hour** clock
+- Language-appropriate month/day names
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
+To configure, open the User Menu (top-right corner) → **Date Format** → pick a locale from the grid or type a custom one (e.g. `de-DE`, `ja-JP`). The preference is persisted in `localStorage`.
 
-1. Fork o projeto
-2. Crie sua branch de feature (`git checkout -b feature/nova-funcionalidade`)
-3. Commit suas alterações (`git commit -m 'feat: adiciona nova funcionalidade'`)
-4. Push para a branch (`git push origin feature/nova-funcionalidade`)
-5. Abra um Pull Request
+> 💡 The locale only affects date/time display formatting — the UI language remains whatever was selected for the interface.
 
 ---
 
-## 📜 Licença
+## ☀️🌙 Themes
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Zapeia offers two visual themes:
+
+- **Light** — Beige background with green bubbles (classic WhatsApp style)
+- **Dark** — Dark background with dark bubbles (WhatsApp Dark Mode style)
+
+The theme is persisted in `localStorage` and maintained across sessions.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open issues and pull requests.
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
 <div align="center">
   <p>
-    Feito com ❤️ para transformar exportações do WhatsApp em uma experiência de navegação agradável.
+    Made with ❤️ to turn WhatsApp exports into a pleasant browsing experience.
   </p>
   <p>
-    <strong>Zapeia</strong> — porque conversa boa merece ser revisitada.
+    <strong>Zapeia</strong> — because good conversations deserve to be revisited.
   </p>
   <p>
-    🙈 Conversas sensíveis não são versionadas. O repositório contém apenas o visualizador.
+    🙈 Sensitive conversations are not versioned. This repository contains only the viewer.
   </p>
 </div>

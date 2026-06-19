@@ -2,8 +2,8 @@
 ## Stack
 - Vite + React + TypeScript + Tailwind CSS
 
-## Arquitetura
-**Atomic Design** combinado com **Bulletproof React**.
+## Architecture
+**Atomic Design** combined with **Bulletproof React**.
 
 ```
 src/
@@ -13,51 +13,51 @@ src/
 │   ├── molecules/    # FormField, SearchBar, Card...
 │   ├── organisms/    # Header, Sidebar, DataTable...
 │   └── templates/    # PageLayout, AuthLayout...
-├── features/         # Módulos por domínio (Bulletproof React)
+├── features/         # Domain modules (Bulletproof React)
 │   └── [feature]/
 │       ├── components/
 │       ├── hooks/
 │       ├── types/
 │       └── index.ts
-├── hooks/            # Hooks globais reutilizáveis
-├── lib/              # Configurações de libs (ex: axios, queryClient)
-├── pages/            # Rotas (apenas composição de templates + features)
-├── types/            # Tipos globais
-└── utils/            # Funções utilitárias puras
+├── hooks/            # Reusable global hooks
+├── lib/              # Library configs (e.g. axios, queryClient)
+├── pages/            # Routes (only template + feature composition)
+├── types/            # Global types
+└── utils/            # Pure utility functions
 ```
 
-## Regras
-### Componentes
-- Um componente = uma responsabilidade (SRP).
-- Máximo **15 linhas** por função ou handler.
-- Extraia lógica para hooks customizados quando o componente crescer.
-- Exporte sempre pelo `index.ts` da pasta.
-- Use Tailwind para estilização; nunca sobrescreva estilos inline.
+## Rules
+### Components
+- One component = one responsibility (SRP).
+- Maximum **15 lines** per function or handler.
+- Extract logic to custom hooks when the component grows.
+- Always export via the folder's `index.ts`.
+- Use Tailwind for styling; never override inline styles.
 
 ### Hooks
-- Prefixo `use` obrigatório.
-- Cada hook resolve apenas uma preocupação.
-- Máximo 15 linhas por função interna ao hook; extraia helpers para `utils/` se necessário.
+- `use` prefix is mandatory.
+- Each hook addresses only one concern.
+- Maximum 15 lines per internal hook function; extract helpers to `utils/` if needed.
 
-### Tipagem
-- Sem `any`. Use `unknown` quando o tipo for incerto e faça narrowing.
-- Props tipadas com `interface` (não `type`) para componentes React.
-- Tipos de domínio ficam em `features/[feature]/types/`.
+### Typing
+- No `any`. Use `unknown` when the type is uncertain and perform narrowing.
+- Props typed with `interface` (not `type`) for React components.
+- Domain types go in `features/[feature]/types/`.
 
-### Estilo
-- Classes Tailwind no JSX; sem CSS modules, sem styled-components.
-- Variantes de componentes via `cva` (class-variance-authority) quando houver múltiplos estados visuais.
-- Tokens de design centralizados no `tailwind.config.ts`.
+### Styling
+- Tailwind classes in JSX; no CSS modules, no styled-components.
+- Component variants via `cva` (class-variance-authority) when there are multiple visual states.
+- Design tokens centralized in `tailwind.config.ts`.
 
 ### Skills
-- Prefira sempre skills de projeto e globais disponíveis antes de gerar código do zero.
+- Always prefer project and global skills before generating code from scratch.
 
-### Qualidade
-- Funções com mais de 15 linhas devem ser refatoradas — sem exceções.
-- Sem lógica de negócio em componentes; use hooks ou `utils/`.
-- Imports absolutos a partir de `src/` (configure em `tsconfig.json` com `paths`).
+### Quality
+- Functions with more than 15 lines must be refactored — no exceptions.
+- No business logic in components; use hooks or `utils/`.
+- Absolute imports from `src/` (configure in `tsconfig.json` with `paths`).
 
-## Exemplo de componente átomo
+## Atom component example
 ```tsx
 // src/components/atoms/Button/Button.tsx
 import { cva, type VariantProps } from 'class-variance-authority'
