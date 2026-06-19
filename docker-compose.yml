@@ -1,16 +1,16 @@
 services:
   zapeia:
-    # ── Build local (comente se for usar a imagem do Hub) ──
+    # ── Local build (comment out if using the Hub image) ──
     build:
       context: .
       dockerfile: Dockerfile
-    # ── Imagem do Docker Hub (descomente e comente o build acima) ──
+    # ── Docker Hub image (uncomment and comment out the build above) ──
     # image: filipelperes/zapeia:latest
     container_name: zapeia
     ports:
       - "5174:80"
     volumes:
-      # Dados do usuário — montados em runtime, NÃO na imagem
+      # User data — mounted at runtime, NOT baked into the image
       - ./chat.txt:/usr/share/nginx/html/chat.txt
       - ./media:/usr/share/nginx/html/media
     environment:
