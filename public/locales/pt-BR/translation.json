@@ -1,0 +1,79 @@
+{
+  "app": {
+    "conversationWith": "Conversa com {{name}}",
+    "conversationWithTwo": "{{name1}} e {{name2}}",
+    "loadingConversations": "Carregando conversas...",
+    "whatsappHistory": "Histórico do WhatsApp"
+  },
+  "chat": {
+    "attach": "Anexar",
+    "closeSearch": "Fechar pesquisa",
+    "couldNotLoadMessages": "Não foi possível carregar as mensagens",
+    "deletedMessage": "Mensagem apagada",
+    "edited": "Editada",
+    "emoji": "Emoji",
+    "noMessagesFound": "Nenhuma mensagem encontrada",
+    "noResultsFound": "Nenhum resultado encontrado",
+    "search": "Pesquisar",
+    "searchPlaceholder": "Pesquisar...",
+    "send": "Enviar",
+    "tryAgain": "Tentar novamente",
+    "typeMessage": "Digite uma mensagem"
+  },
+  "emptyState": {
+    "privacyNotice": "O <1>Zapeia</1> é um visualizador local. Nenhum dado é enviado para servidores externos. Tudo roda exclusivamente no seu navegador.",
+    "step1Description": "No grupo/conversa, clique em <1>Mais → Exportar conversa</1> e escolha <2>sem mídia</2>.",
+    "step1Title": "Exporte a conversa do WhatsApp",
+    "step2Description": "Salve o arquivo como <1>public/chat.txt</1> na raiz do projeto.",
+    "step2Title": "Copie o arquivo para o projeto",
+    "step3Description": "Copie fotos, vídeos e áudios para <1>public/media/</1>.",
+    "step3Title": "(Opcional) Adicione mídias",
+    "subtitle": "Para começar, configure sua conversa",
+    "title": "Visualizador de conversas exportadas do WhatsApp",
+    "watchingFile": "Observando <1>public/chat.txt</1> — a tela será atualizada automaticamente assim que o arquivo for detectado."
+  },
+  "error": {
+    "errorLoadingChat": "Erro ao carregar chat",
+    "failedToLoadFile": "Falha ao carregar arquivo: {{statusText}}",
+    "unknownError": "Erro desconhecido"
+  },
+  "imageLightbox": {
+    "close": "Fechar",
+    "download": "Baixar",
+    "enlargedImage": "imagem ampliada",
+    "image": "imagem",
+    "imagePreview": "Visualização da imagem",
+    "viewImage": "Visualizar imagem"
+  },
+  "media": {
+    "audioNotSupported": "Seu navegador não suporta áudio.",
+    "contactAvailable": "Contato disponível:",
+    "deletedMessage": "Mensagem apagada",
+    "downloadFile": "Baixar arquivo",
+    "downloadVcf": "Baixar .vcf",
+    "image": "imagem",
+    "mediaNotAvailable": "Mídia não exportada ou indisponível",
+    "videoNotSupported": "Seu navegador não suporta vídeos."
+  },
+  "theme": {
+    "darkMode": "Modo escuro",
+    "enableDarkMode": "Ativar modo escuro",
+    "enableLightMode": "Ativar modo claro",
+    "lightMode": "Modo claro"
+  },
+  "userMenu": {
+    "apply": "Aplicar",
+    "cancel": "Cancelar",
+    "clearName": "Limpar nome",
+    "customLocale": "Ou digite um locale personalizado:",
+    "dateFormat": "Formato de data",
+    "localePlaceholder": "ex.: de-DE",
+    "menu": "Menu",
+    "namePlaceholder": "Ex: Nome Sobrenome",
+    "save": "Salvar",
+    "setMyName": "Definir meu nome...",
+    "settings": "Configurações",
+    "yourName": "Seu nome",
+    "yourNameInMessages": "Seu nome nas mensagens"
+  }
+}
