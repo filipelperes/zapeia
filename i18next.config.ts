@@ -1,6 +1,6 @@
-import type { I18nextToolkitConfig } from 'i18next-cli';
+import { defineConfig } from 'i18next-cli';
 
-const config: I18nextToolkitConfig = {
+export default defineConfig({
   locales: ['en', 'pt-BR'],
   extract: {
     input: ['src/**/*.{ts,tsx}'],
@@ -9,13 +9,11 @@ const config: I18nextToolkitConfig = {
     transComponents: ['Trans'],
     keySeparator: '.',
     nsSeparator: false,
-    defaultValue: '',
+    defaultValue: (_key: string, _ns: string, _lang: string, value: string) => value,
     primaryLanguage: 'en',
   },
   types: {
     input: ['public/locales/en/translation.json'],
     output: 'src/types/i18next.d.ts',
   },
-};
-
-export default config;
+});

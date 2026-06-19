@@ -191,7 +191,7 @@ describe('parseChat', () => {
          '   Ainda com espaço inicial',
       ].join('\n');
       const result = parseChat(input);
-      // Original: '   Ainda com espaço inicial' with trim() → still has the newline
+      // Original: '   Ainda com espaço inicial' trimmed → still has the newline
       expect(result[0].content).toContain('Ainda com espaço inicial');
    });
 

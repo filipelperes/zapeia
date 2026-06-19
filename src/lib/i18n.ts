@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import en from '../../public/locales/en/translation.json';
 import ptBR from '../../public/locales/pt-BR/translation.json';
 
-const detectedLanguage = navigator.language.startsWith('pt') ? 'pt-BR' : 'en';
+const detectedLanguage = navigator.language === 'pt-BR' || navigator.language.startsWith('pt-') ? 'pt-BR' : 'en';
 
 void i18n.use(initReactI18next).init({
   resources: {
