@@ -1,4 +1,5 @@
 import { memo, useRef, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChatBubble } from '@/features/chat/components/ChatBubble';
 import { DateSeparator } from '@/features/chat/components/DateSeparator';
 import type { ParsedMessage } from '@/features/chat/types';
@@ -29,6 +30,7 @@ function matchesSearch(message: ParsedMessage, query: string): boolean {
  * Auto-scrolls to the bottom when new messages arrive.
  */
 export const MessageList = memo(function MessageList({ messages, searchQuery, myName }: MessageListProps) {
+  const { t } = useTranslation();
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const filteredMessages = useMemo(() => {
@@ -44,7 +46,7 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
     return (
       <div className="flex-1 overflow-y-auto px-2 py-3">
         <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-          Nenhum resultado encontrado
+          {t('chat.noResultsFound')}
         </div>
       </div>
     );

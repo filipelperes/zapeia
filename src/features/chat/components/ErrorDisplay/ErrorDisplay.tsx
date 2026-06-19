@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ErrorDisplayProps {
   message: string;
@@ -45,6 +46,7 @@ export const ErrorDisplay = memo(function ErrorDisplay({
   message,
   onRetry,
 }: ErrorDisplayProps) {
+  const { t } = useTranslation();
   return (
     <div
       className="flex flex-col items-center justify-center gap-4 p-8 text-center"
@@ -53,7 +55,7 @@ export const ErrorDisplay = memo(function ErrorDisplay({
       <WarningIcon />
       <div className="max-w-sm">
         <p className="text-sm text-red-400 font-medium mb-1">
-          Não foi possível carregar as mensagens
+          {t('chat.couldNotLoadMessages')}
         </p>
         <p className="text-xs text-gray-400">{message}</p>
       </div>
@@ -61,10 +63,10 @@ export const ErrorDisplay = memo(function ErrorDisplay({
         <button
           onClick={onRetry}
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#00A884] hover:bg-[#06CF9C] rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#00A884]/50"
-          aria-label="Tentar novamente"
+          aria-label={t('chat.tryAgain')}
         >
           <RetryIcon />
-          Tentar novamente
+          {t('chat.tryAgain')}
         </button>
       )}
     </div>

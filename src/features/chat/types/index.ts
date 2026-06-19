@@ -18,7 +18,7 @@ export interface ParsedMessage {
   content: string;
   /** Detected message type */
   type: MessageType;
-  /** Whether this message was edited (appends "Editada" indicator) */
+  /** Whether this message was edited (appends "Edited" indicator) */
   edited?: boolean;
 }
 

@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 
 function ZapIcon() {
   return (
@@ -22,6 +23,7 @@ function WatchDot() {
  * Provides clear setup instructions and auto-detects when the file appears.
  */
 export const EmptyState = memo(function EmptyState() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-screen bg-[#111B21] text-white px-6 py-12">
       {/* Logo / Icon */}
@@ -34,13 +36,13 @@ export const EmptyState = memo(function EmptyState() {
         Zapeia
       </h1>
       <p className="text-[#8696A0] text-base mb-10 text-center max-w-md">
-        Visualizador de conversas exportadas do WhatsApp
+        {t('emptyState.title')}
       </p>
 
       {/* Setup card */}
       <div className="w-full max-w-lg bg-[#1F2C33] rounded-2xl p-8 shadow-lg border border-[#2F3D46]">
         <h2 className="text-lg font-semibold mb-6 text-center">
-          Para começar, configure sua conversa
+          {t('emptyState.subtitle')}
         </h2>
 
         <ol className="space-y-5">
@@ -49,9 +51,11 @@ export const EmptyState = memo(function EmptyState() {
               1
             </span>
             <div>
-              <p className="text-sm font-medium">Exporte a conversa do WhatsApp</p>
+              <p className="text-sm font-medium">{t('emptyState.step1Title')}</p>
               <p className="text-xs text-[#8696A0] mt-1">
-                No grupo/conversa, clique em <strong className="text-white">Mais &rarr; Exportar conversa</strong> e escolha <strong className="text-white">sem mídia</strong>.
+                <Trans i18nKey="emptyState.step1Description">
+                  In the group/conversation, click <strong>More &rarr; Export chat</strong> and choose <strong>without media</strong>.
+                </Trans>
               </p>
             </div>
           </li>
@@ -61,9 +65,11 @@ export const EmptyState = memo(function EmptyState() {
               2
             </span>
             <div>
-              <p className="text-sm font-medium">Copie o arquivo para o projeto</p>
+              <p className="text-sm font-medium">{t('emptyState.step2Title')}</p>
               <p className="text-xs text-[#8696A0] mt-1">
-                Salve o arquivo como <code className="text-[#06CF9C] bg-[#111B21] px-1.5 py-0.5 rounded text-xs">public/chat.txt</code> na raiz do projeto.
+                <Trans i18nKey="emptyState.step2Description">
+                  Save the file as <code className="text-[#06CF9C] bg-[#111B21] px-1.5 py-0.5 rounded text-xs">public/chat.txt</code> in the project root.
+                </Trans>
               </p>
             </div>
           </li>
@@ -73,9 +79,11 @@ export const EmptyState = memo(function EmptyState() {
               3
             </span>
             <div>
-              <p className="text-sm font-medium">(Opcional) Adicione mídias</p>
+              <p className="text-sm font-medium">{t('emptyState.step3Title')}</p>
               <p className="text-xs text-[#8696A0] mt-1">
-                Copie fotos, vídeos e áudios para <code className="text-[#06CF9C] bg-[#111B21] px-1.5 py-0.5 rounded text-xs">public/media/</code>.
+                <Trans i18nKey="emptyState.step3Description">
+                  Copy photos, videos, and audio to <code className="text-[#06CF9C] bg-[#111B21] px-1.5 py-0.5 rounded text-xs">public/media/</code>.
+                </Trans>
               </p>
             </div>
           </li>
@@ -83,14 +91,18 @@ export const EmptyState = memo(function EmptyState() {
 
         <div className="mt-8 pt-5 border-t border-[#2F3D46] flex items-center gap-3 text-xs text-[#8696A0]">
           <WatchDot />
-          <span>Observando <code className="text-[#06CF9C]">public/chat.txt</code> &mdash; a tela será atualizada automaticamente assim que o arquivo for detectado.</span>
+          <Trans as="span" i18nKey="emptyState.watchingFile">
+            Watching <code className="text-[#06CF9C]">public/chat.txt</code> &mdash; the screen will update automatically as soon as the file is detected.
+          </Trans>
         </div>
       </div>
 
       {/* Footer */}
       <p className="mt-10 text-xs text-[#8696A0] text-center max-w-md leading-relaxed">
-        O <strong className="text-white">Zapeia</strong> é um visualizador local. Nenhum dado é enviado para servidores externos.
-        Tudo roda exclusivamente no seu navegador.
+        <Trans i18nKey="emptyState.privacyNotice">
+          <strong className="text-white">Zapeia</strong> is a local viewer. No data is sent to external servers.
+          Everything runs exclusively in your browser.
+        </Trans>
       </p>
     </div>
   );

@@ -1,4 +1,5 @@
 import { memo, useMemo, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from '@/features/chat/components/ThemeToggle';
 import { UserMenu } from '@/features/chat/components/UserMenu';
 
@@ -60,6 +61,7 @@ export const ChatHeader = memo(function ChatHeader({
   onNameClear,
 }: ChatHeaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isSearching) {
@@ -67,7 +69,7 @@ export const ChatHeader = memo(function ChatHeader({
     }
   }, [isSearching]);
 
-  const resolvedTitle = title ?? 'Histórico do WhatsApp';
+  const resolvedTitle = title ?? t('app.whatsappHistory');
 
   return (
     <header className="chat-header sticky top-0 z-10 flex items-center gap-3 px-4 py-3 bg-[#075E54] text-white shadow-md">
@@ -79,7 +81,7 @@ export const ChatHeader = memo(function ChatHeader({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchQueryChange?.(e.target.value)}
-            placeholder="Pesquisar..."
+            placeholder={t('chat.searchPlaceholder')}
             className="w-full bg-[#1F2C33] text-white placeholder-[#8696A0] rounded-lg px-3 py-1.5 text-sm outline-none border border-transparent focus:border-[#00A884] transition-colors"
           />
         ) : (
@@ -96,7 +98,7 @@ export const ChatHeader = memo(function ChatHeader({
           <button
             onClick={onToggleSearch}
             className="hover:opacity-80 transition-opacity"
-            aria-label="Fechar pesquisa"
+            aria-label={t('chat.closeSearch')}
           >
             <CloseIcon />
           </button>
@@ -104,7 +106,7 @@ export const ChatHeader = memo(function ChatHeader({
           <button
             onClick={onToggleSearch}
             className="hover:opacity-80 transition-opacity"
-            aria-label="Pesquisar"
+            aria-label={t('chat.search')}
           >
             <SearchIcon />
           </button>

@@ -25,14 +25,22 @@ const LOCALE_OPTIONS: Intl.DateTimeFormatOptions = {
    minute: '2-digit',
 } as const;
 
-export function formatDateString(date: string, time: string): string {
+/**
+ * Formats a WhatsApp date/time pair into a locale-aware string.
+ *
+ * @param date - Date portion from the WhatsApp export
+ * @param time - Time portion from the WhatsApp export
+ * @param locale - Locale string for date/time formatting (default 'en-US')
+ * @returns A formatted date-time string
+ */
+export function formatDateString(date: string, time: string, locale: string = 'en-US'): string {
    const dateTimeStr = `${date} ${time}`;
 
    for (const fmt of DATE_FORMATS) {
       try {
          const parsed = parse(dateTimeStr, fmt, new Date());
          if (!isNaN(parsed.getTime())) {
-            return parsed.toLocaleString('pt-BR', LOCALE_OPTIONS);
+            return parsed.toLocaleString(locale, LOCALE_OPTIONS);
          }
       } catch {
          continue;

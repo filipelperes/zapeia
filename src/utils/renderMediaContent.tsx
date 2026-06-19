@@ -1,6 +1,7 @@
 import type { JSX } from 'react';
 import { formatWhatsAppText } from './formatWhatsAppText';
 import { ImageWithPreview } from '@/features/chat/components/ImageLightbox';
+import type { TFunction } from 'i18next';
 
 const FILE_ATTACHED = /\s*\(file attached\)\s*/gi;
 const IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'webp'] as const;
@@ -9,12 +10,28 @@ const AUDIO_EXTS = ['opus'] as const;
 const CONTACT_EXTS = ['vcf'] as const;
 const ALL_KNOWN = [...IMAGE_EXTS, ...VIDEO_EXTS, ...AUDIO_EXTS, ...CONTACT_EXTS] as readonly string[];
 
+/** Default translate function that returns the key itself or English fallback */
+function defaultT(key: string): string {
+   const fallbacks: Record<string, string> = {
+      'media.downloadFile': 'Download file',
+      'media.image': 'image',
+      'media.videoNotSupported': 'Your browser does not support videos.',
+      'media.audioNotSupported': 'Your browser does not support audio.',
+      'media.contactAvailable': 'Contact available:',
+      'media.downloadVcf': 'Download .vcf',
+      'media.mediaNotAvailable': 'Media not exported or unavailable',
+      'media.deletedMessage': 'Deleted message',
+   };
+   return fallbacks[key] ?? key;
+}
+
 type MediaRendererOptions = {
    baseUrl?: string;
    highlightQuery?: string;
+   t?: TFunction;
 };
 
-// ─── helpers ────────────────────────────────────────────────────────────────
+// ─── helpers ───────────────────────────────────────────────────────────
 
 function getMediaPath(filename: string, baseUrl = ''): string {
    return `${baseUrl}media/${filename}`;
@@ -47,25 +64,25 @@ function looksLikeAttachedMedia(content: string): boolean {
    return ALL_KNOWN.includes(ext);
 }
 
-// ─── sub-components ─────────────────────────────────────────────────────────
+// ─── sub-components ────────────────────────────────────────────────────
 
-function DownloadLink({ href }: { href: string }) {
+function DownloadLink({ href, t }: { href: string; t: TFunction }) {
    return (
       <a
          href={href}
          download
          className="text-blue-500 underline hover:text-blue-800 text-xs"
       >
-         Baixar arquivo
+         {t('media.downloadFile')}
       </a>
    );
 }
 
-function ImageMedia({ src }: { src: string }) {
-      return <ImageWithPreview src={src} alt="imagem" />;
+function ImageMedia({ src, t }: { src: string; t: TFunction }) {
+   return <ImageWithPreview src={src} alt={t('media.image')} />;
 }
 
-function VideoMedia({ src }: { src: string }) {
+function VideoMedia({ src, t }: { src: string; t: TFunction }) {
    return (
       <video
          controls
@@ -73,22 +90,22 @@ function VideoMedia({ src }: { src: string }) {
          className="max-w-full max-h-64 rounded-lg"
       >
          <source src={src} type="video/mp4" />
-         Seu navegador não suporta vídeos.
+         {t('media.videoNotSupported')}
       </video>
    );
 }
 
-function AudioMedia({ src }: { src: string }) {
+function AudioMedia({ src, t }: { src: string; t: TFunction }) {
    return (
       <audio controls preload="none" className="max-w-full h-10">
          <source src={src} type="audio/ogg" />
-         Seu navegador não suporta áudio.
+         {t('media.audioNotSupported')}
       </audio>
    );
 }
 
-/** Renders the "Contato disponível:" line + download link. */
-function ContactMedia({ vcfPath, filename }: { vcfPath: string; filename: string }) {
+/** Renders the "Contact available:" line + download link. */
+function ContactMedia({ vcfPath, filename, t }: { vcfPath: string; filename: string; t: TFunction }) {
    return (
       <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
          <div className="w-10 h-10 rounded-full bg-[#00A884] flex items-center justify-center">
@@ -97,23 +114,23 @@ function ContactMedia({ vcfPath, filename }: { vcfPath: string; filename: string
             </svg>
          </div>
          <div>
-            <p className="text-xs text-gray-500">Contato disponível:</p>
+            <p className="text-xs text-gray-500">{t('media.contactAvailable')}</p>
             <p className="text-sm font-medium text-gray-900">{filename}</p>
             <a
                href={vcfPath}
                download
                className="text-xs text-blue-500 underline hover:text-blue-800"
             >
-               Baixar .vcf
+               {t('media.downloadVcf')}
             </a>
          </div>
       </div>
    );
 }
 
-// ─── media routing (always returns JSX.Element) ────────────────────────────
+// ─── media routing (always returns JSX.Element) ───────────────────────
 
-function renderMedia(type: string, content: string, baseUrl: string): JSX.Element {
+function renderMedia(type: string, content: string, baseUrl: string, t: TFunction): JSX.Element {
    const name = cleanName(content);
    const ext = extension(content);
 
@@ -121,7 +138,7 @@ function renderMedia(type: string, content: string, baseUrl: string): JSX.Elemen
    if (isMediaOmitted(content)) {
       return (
          <span className="italic text-gray-400 text-xs">
-            Mídia não exportada ou indisponível
+            {t('media.mediaNotAvailable')}
          </span>
       );
    }
@@ -130,7 +147,7 @@ function renderMedia(type: string, content: string, baseUrl: string): JSX.Elemen
    if (type === 'deleted') {
       return (
          <span className="italic line-through text-gray-400 text-xs">
-            Mensagem apagada
+            {t('media.deletedMessage')}
          </span>
       );
    }
@@ -140,8 +157,8 @@ function renderMedia(type: string, content: string, baseUrl: string): JSX.Elemen
       const src = getMediaPath(name, baseUrl);
       return (
          <div className="flex flex-col gap-1">
-            <ImageMedia src={src} />
-            <DownloadLink href={src} />
+            <ImageMedia src={src} t={t} />
+            <DownloadLink href={src} t={t} />
          </div>
       );
    }
@@ -152,35 +169,35 @@ function renderMedia(type: string, content: string, baseUrl: string): JSX.Elemen
          const src = getMediaPath(name, baseUrl);
          return (
             <div className="flex flex-col gap-1">
-               <VideoMedia src={src} />
-               <DownloadLink href={src} />
+               <VideoMedia src={src} t={t} />
+               <DownloadLink href={src} t={t} />
             </div>
          );
       }
       const src = getMediaPath(name, baseUrl);
-      return <DownloadLink href={src} />;
+      return <DownloadLink href={src} t={t} />;
    }
 
    // 5. audio type → only opus
    if (type === 'audio') {
       if (ext && AUDIO_EXTS.includes(ext as typeof AUDIO_EXTS[number])) {
          const src = getMediaPath(name, baseUrl);
-         return <AudioMedia src={src} />;
+         return <AudioMedia src={src} t={t} />;
       }
       const src = getMediaPath(name, baseUrl);
-      return <DownloadLink href={src} />;
+      return <DownloadLink href={src} t={t} />;
    }
 
    // 6. contact type → always contact
    if (type === 'contact') {
       const vcfPath = getMediaPath(name, baseUrl);
-      return <ContactMedia vcfPath={vcfPath} filename={name} />;
+      return <ContactMedia vcfPath={vcfPath} filename={name} t={t} />;
    }
 
    // 7. generic type → download link
    if (type === 'generic') {
       const src = getMediaPath(name, baseUrl);
-      return <DownloadLink href={src} />;
+      return <DownloadLink href={src} t={t} />;
    }
 
    // 8. media / message / system → detect from extension
@@ -188,8 +205,8 @@ function renderMedia(type: string, content: string, baseUrl: string): JSX.Elemen
       const src = getMediaPath(name, baseUrl);
       return (
          <div className="flex flex-col gap-1">
-            <ImageMedia src={src} />
-            <DownloadLink href={src} />
+            <ImageMedia src={src} t={t} />
+            <DownloadLink href={src} t={t} />
          </div>
       );
    }
@@ -198,28 +215,28 @@ function renderMedia(type: string, content: string, baseUrl: string): JSX.Elemen
       const src = getMediaPath(name, baseUrl);
       return (
          <div className="flex flex-col gap-1">
-            <VideoMedia src={src} />
-            <DownloadLink href={src} />
+            <VideoMedia src={src} t={t} />
+            <DownloadLink href={src} t={t} />
          </div>
       );
    }
 
    if (ext && AUDIO_EXTS.includes(ext as typeof AUDIO_EXTS[number])) {
       const src = getMediaPath(name, baseUrl);
-      return <AudioMedia src={src} />;
+      return <AudioMedia src={src} t={t} />;
    }
 
    if (ext && CONTACT_EXTS.includes(ext as typeof CONTACT_EXTS[number])) {
       const vcfPath = getMediaPath(name, baseUrl);
-      return <ContactMedia vcfPath={vcfPath} filename={name} />;
+      return <ContactMedia vcfPath={vcfPath} filename={name} t={t} />;
    }
 
    // default fallback for media types → download link
    const src = getMediaPath(name, baseUrl);
-   return <DownloadLink href={src} />;
+   return <DownloadLink href={src} t={t} />;
 }
 
-// ─── public API ─────────────────────────────────────────────────────────────
+// ─── public API ────────────────────────────────────────────────────────
 
 /**
  * Renders WhatsApp media content.
@@ -236,6 +253,7 @@ export function renderMediaContent(
    content: string,
    options?: MediaRendererOptions,
 ): JSX.Element | (string | JSX.Element)[] {
+   const t = options?.t ?? (defaultT as TFunction);
    const baseUrl = options?.baseUrl ?? '';
    const highlightQuery = options?.highlightQuery;
 
@@ -244,7 +262,7 @@ export function renderMediaContent(
    if (type === 'deleted') {
       return (
          <span className="italic line-through text-gray-400 text-xs">
-            Mensagem apagada
+            {t('media.deletedMessage')}
          </span>
       );
    }
@@ -252,13 +270,13 @@ export function renderMediaContent(
    if (isMediaOmitted(content)) {
       return (
          <span className="italic text-gray-400 text-xs">
-            Mídia não exportada ou indisponível
+            {t('media.mediaNotAvailable')}
          </span>
       );
    }
 
    if (type === 'media' || type === 'image' || type === 'video' || type === 'audio' || type === 'contact' || type === 'generic') {
-      return renderMedia(type, content, baseUrl);
+      return renderMedia(type, content, baseUrl, t);
    }
 
    // ── message / system ───────────────────────────────────────────────────
@@ -266,7 +284,7 @@ export function renderMediaContent(
    if (type === 'message' || type === 'system') {
       // If the line looks like an attached media file → render media
       if (looksLikeAttachedMedia(content)) {
-         return renderMedia(type, content, baseUrl);
+         return renderMedia(type, content, baseUrl, t);
       }
 
       // Otherwise return the formatted text array (legacy contract:

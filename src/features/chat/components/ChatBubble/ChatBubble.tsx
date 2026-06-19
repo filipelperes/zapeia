@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MessageTime } from '@/features/chat/components/MessageTime';
 import { MediaContent } from '@/features/chat/components/MediaContent';
 import { SystemMessage } from '@/features/chat/components/SystemMessage';
@@ -19,17 +20,19 @@ function SenderName({ name }: { name: string }) {
 }
 
 function DeletedMessage() {
+  const { t } = useTranslation();
   return (
     <span className="italic line-through text-gray-400 text-xs">
-      Mensagem apagada
+      {t('chat.deletedMessage')}
     </span>
   );
 }
 
 function EditedIndicator() {
+  const { t } = useTranslation();
   return (
     <span className="text-[10px] text-gray-400 italic ml-1">
-      Editada
+      {t('chat.edited')}
     </span>
   );
 }

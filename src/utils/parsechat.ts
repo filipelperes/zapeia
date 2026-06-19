@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next';
 import type { ParsedMessage, MessageType } from '@/types';
 
 /** Regex to match WhatsApp chat export lines */
@@ -92,15 +93,15 @@ export function extractGroupName(text: string): string | null {
  *
  * Priority:
  * 1. Group name extracted from the "created group" system message
- * 2. Single sender → "Conversa com {nome}"
- * 3. Two senders → "{nome1} e {nome2}"
- * 4. Fallback → "Histórico do WhatsApp"
+ * 2. Single sender → "Conversation with {name}"
+ * 3. Two senders → "{name1} and {name2}"
+ * 4. Fallback → "WhatsApp History"
  *
  * @param rawText - Raw chat export text (used for group name extraction)
  * @param messages - Parsed messages (used for sender analysis when no group name)
  * @returns A derived conversation title
  */
-export function deriveConversationTitle(rawText: string, messages: ParsedMessage[]): string {
+export function deriveConversationTitle(rawText: string, messages: ParsedMessage[], t?: TFunction): string {
   // Priority 1: group name from "created group" system message
   const groupName = extractGroupName(rawText);
   if (groupName) return groupName;
@@ -108,11 +109,11 @@ export function deriveConversationTitle(rawText: string, messages: ParsedMessage
   // Priority 2 onwards: analyze unique non-system senders
   const senders = [...new Set(messages.map((m) => m.sender).filter((s) => s !== 'system'))];
 
-  if (senders.length === 0) return 'Histórico do WhatsApp';
-  if (senders.length === 1) return `Conversa com ${senders[0]}`;
-  if (senders.length === 2) return `${senders[0]} e ${senders[1]}`;
+  if (senders.length === 0) return t?.('app.whatsappHistory') ?? 'WhatsApp History';
+  if (senders.length === 1) return t?.('app.conversationWith', { name: senders[0] }) ?? `Conversation with ${senders[0]}`;
+  if (senders.length === 2) return t?.('app.conversationWithTwo', { name1: senders[0], name2: senders[1] }) ?? `${senders[0]} and ${senders[1]}`;
 
-  return 'Histórico do WhatsApp';
+  return t?.('app.whatsappHistory') ?? 'WhatsApp History';
 }
 
 export function parseChat(text: string): ParsedMessage[] {

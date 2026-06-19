@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/features/chat/hooks/useTheme';
 
 function SunIcon() {
@@ -19,14 +20,15 @@ function MoonIcon() {
 
 /** Small toggle button to switch between light and dark themes */
 export const ThemeToggle = memo(function ThemeToggle() {
+   const { t } = useTranslation();
    const { theme, toggleTheme } = useTheme();
 
    return (
       <button
          onClick={toggleTheme}
          className="w-5 h-5 cursor-pointer hover:opacity-80 text-white"
-         aria-label={theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
-         title={theme === 'light' ? 'Modo escuro' : 'Modo claro'}
+         aria-label={theme === 'light' ? t('theme.enableDarkMode') : t('theme.enableLightMode')}
+         title={theme === 'light' ? t('theme.darkMode') : t('theme.lightMode')}
       >
          {theme === 'light' ? <MoonIcon /> : <SunIcon />}
       </button>
