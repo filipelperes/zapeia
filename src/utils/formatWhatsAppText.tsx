@@ -134,7 +134,7 @@ export const formatWhatsAppText = (
       parts.push(...highlightText(raw, highlightQuery));
    }
 
-   return parts.flatMap((part, i) => {
+   return parts.flatMap((part) => {
       if (typeof part !== 'string') return [part];
       // splitLinks doesn't support highlight text; apply highlight after link splitting
       const linkParts = splitLinks(part);
