@@ -61,7 +61,7 @@ The name is a pun on **Zap** (a nickname for WhatsApp) and **passeia** (Portugue
 ## ✨ Features
 
 | Feature | Description |
-|---|---|---|
+|---|---|
 | 🗨️ **Conversation viewer** | Renders WhatsApp `.txt` export files with full formatting |
 | 🎨 **Light/Dark themes** | Switch between light and dark modes — all components adapt, including menus and inputs |
 | 🔍 **Message search** | Instantly search for any text in the conversation |
