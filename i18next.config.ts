@@ -4,7 +4,7 @@ export default defineConfig({
   locales: ['en', 'pt-BR'],
   extract: {
     input: ['src/**/*.{ts,tsx}'],
-    output: 'public/locales/{{language}}/translation.json',
+    output: 'src/locales/{{language}}/translation.json',
     functions: ['t', 'i18n.t'],
     transComponents: ['Trans'],
     keySeparator: '.',
@@ -13,7 +13,7 @@ export default defineConfig({
     primaryLanguage: 'en',
   },
   types: {
-    input: ['public/locales/en/translation.json'],
+    input: ['src/locales/en/translation.json'],
     output: 'src/types/i18next.d.ts',
   },
 });
