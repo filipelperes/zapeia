@@ -82,7 +82,8 @@ describe('MessageList', () => {
 
    it('should have scrollable container', () => {
       const { container } = render(<MessageList messages={messages} />);
-      const scrollDiv = container.firstChild as HTMLElement;
+      const wrapper = container.firstChild as HTMLElement;
+      const scrollDiv = wrapper.firstChild as HTMLElement;
       expect(scrollDiv.className).toContain('overflow-y-auto');
    });
 
@@ -314,7 +315,8 @@ describe('MessageList', () => {
 
    it('should have overflow-y-auto scrollable container', () => {
       const { container } = render(<MessageList messages={messages} />);
-      const scrollDiv = container.firstChild as HTMLElement;
+      const wrapper = container.firstChild as HTMLElement;
+      const scrollDiv = wrapper.firstChild as HTMLElement;
       expect(scrollDiv.className).toContain('overflow-y-auto');
    });
 

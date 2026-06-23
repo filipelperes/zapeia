@@ -178,11 +178,23 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
             </div>
           ) : localeEditing ? (
             <div className="p-3">
-              <p className="text-xs text-gray-500 mb-2 font-medium">
-                {t('userMenu.dateFormat')}
-              </p>
+              {/* Header with back button */}
+              <div className="flex items-center gap-2 mb-3">
+                <button
+                  onClick={() => setLocaleEditing(false)}
+                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                  aria-label={t('userMenu.back')}
+                >
+                  <svg className="w-4 h-4 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                  </svg>
+                </button>
+                <p className="text-sm font-medium text-gray-700">
+                  {t('userMenu.dateFormat')}
+                </p>
+              </div>
               {/* Quick-select common locales */}
-              <div className="grid grid-cols-2 gap-1 mb-2">
+              <div className="grid grid-cols-2 gap-1 mb-3">
                 {DATE_LOCALES.map((loc) => (
                   <button
                     key={loc.code}
@@ -198,30 +210,28 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
                 ))}
               </div>
               <p className="text-xs text-gray-400 mb-1">{t('userMenu.customLocale')}</p>
-              <div className="flex gap-2">
-                <input
-                  ref={localeInputRef}
-                  type="text"
-                  value={localeInput}
-                  onChange={(e) => setLocaleInput(e.target.value)}
-                  onKeyDown={handleLocaleKeyDown}
-                  placeholder={t('userMenu.localePlaceholder')}
-                  className="chat-setting-input flex-1 px-3 py-2 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:border-[#00A884] transition-colors"
-                />
+              <input
+                ref={localeInputRef}
+                type="text"
+                value={localeInput}
+                onChange={(e) => setLocaleInput(e.target.value)}
+                onKeyDown={handleLocaleKeyDown}
+                placeholder={t('userMenu.localePlaceholder')}
+                className="chat-setting-input w-full px-3 py-2 text-sm rounded-lg outline-none focus:border-[#00A884] transition-colors"
+              />
+              <div className="flex justify-end gap-2 mt-2">
+                <button
+                  onClick={() => setLocaleEditing(false)}
+                  className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  {t('userMenu.cancel')}
+                </button>
                 <button
                   onClick={handleCustomLocale}
                   className="flex items-center gap-1 px-3 py-1.5 text-xs text-white bg-[#00A884] rounded-lg hover:bg-[#06CF9C] transition-colors"
                 >
                   <CheckIcon />
                   {t('userMenu.apply')}
-                </button>
-              </div>
-              <div className="flex justify-end mt-2">
-                <button
-                  onClick={() => setLocaleEditing(false)}
-                  className="px-3 py-1 text-xs text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                  {t('userMenu.cancel')}
                 </button>
               </div>
             </div>

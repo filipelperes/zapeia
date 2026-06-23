@@ -70,12 +70,14 @@ services:
 - 🗨️ Faithful rendering of WhatsApp conversations
 - 🌐 Internationalization (English / Brazilian Portuguese)
 - 📅 User-selectable date/time format locale (decoupled from UI language)
-- 🎨 Light/Dark themes
+- 🎨 Light/Dark themes (all components adapt, including menus and inputs)
 - 🔍 Instant text search
 - 🖼️ Display images, videos, audio, and contacts
 - 💬 WhatsApp-style message bubbles
 - 👤 Your name identified in messages
 - 📅 Date separators
+- ⬆️ Scroll-to-top / scroll-to-bottom navigation buttons
+- 📱 Custom scrollbar optimized for mobile (wider, easier to grab)
 - ⚡ Local cache (localStorage)
 - 🔄 Auto-detection of chat file
 
