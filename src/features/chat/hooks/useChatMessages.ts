@@ -36,14 +36,18 @@ function isFileNotFound(response: Response): boolean {
  * - File appears/reappears/modified → re-parses and renders automatically
  * - Same content → no-op (avoids unnecessary re-renders)
  *
+ * The raw text content is exposed via `rawText` in the return value so that
+ * callers (e.g. App) can derive a conversation title without a second fetch.
+ *
  * @param chatFilePath - Path to the chat text file relative to the base URL
- * @returns An object containing parsed messages, loading state, error, notFound, and retry
+ * @returns An object containing parsed messages, loading state, error, notFound, rawText, and retry
  */
 export function useChatMessages(chatFilePath: string): ChatMessagesResult {
   const [messages, setMessages] = useState<ParsedMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [rawText, setRawText] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const cancelledRef = useRef(false);
   const loadCountRef = useRef(0);
@@ -71,6 +75,7 @@ export function useChatMessages(chatFilePath: string): ChatMessagesResult {
     if (isFileNotFound(response)) {
       if (!cancelledRef.current) {
         setMessages([]);
+        setRawText(null);
         setNotFound(true);
       }
       return;
@@ -83,7 +88,12 @@ export function useChatMessages(chatFilePath: string): ChatMessagesResult {
     const text = await response.text();
     if (cancelledRef.current) return;
 
-    // Only update if content actually changed (avoids unnecessary re-renders)
+    // Expose raw text so callers can derive titles without a second fetch.
+    // Use functional updater to return the same reference when the string
+    // hasn't changed, preventing unnecessary re-renders downstream.
+    setRawText((prev) => (prev === text ? prev : text));
+
+    // Only update messages if content actually changed (avoids unnecessary re-renders)
     if (text !== lastContentRef.current) {
       lastContentRef.current = text;
       setMessages(parseChat(text));
@@ -140,5 +150,5 @@ export function useChatMessages(chatFilePath: string): ChatMessagesResult {
     setRefreshTrigger((n) => n + 1);
   }, []);
 
-  return { messages, isLoading, error, notFound, retry };
+  return { messages, isLoading, error, notFound, rawText, retry };
 }

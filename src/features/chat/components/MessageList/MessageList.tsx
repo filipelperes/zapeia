@@ -99,15 +99,26 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
     [],
   );
 
-  const virtualizer = useVirtualizer({
-    count: filteredMessages.length,
-    getScrollElement: () => containerRef.current,
-    estimateSize,
-    overscan: 10,
-    getItemKey,
-    measureElement: measureEl,
-    scrollToFn,
-  });
+  // Stabilise all virtualizer callbacks to prevent cascading re-renders.
+  // Every inline function in the options object creates a new reference on each
+  // render, causing useVirtualizer to internally diff its options and potentially
+  // recompute layout — even when nothing meaningful changed.
+  const getScrollElement = useCallback(() => containerRef.current, []);
+
+  const virtualizerOptions = useMemo(
+    () => ({
+      count: filteredMessages.length,
+      getScrollElement,
+      estimateSize,
+      overscan: 10,
+      getItemKey,
+      measureElement: measureEl,
+      scrollToFn,
+    }),
+    [filteredMessages.length, getScrollElement, estimateSize, getItemKey, measureEl, scrollToFn],
+  );
+
+  const virtualizer = useVirtualizer(virtualizerOptions);
 
   const virtualItems = virtualizer.getVirtualItems();
   /** When the container has no scrollable area (e.g. jsdom tests, zero-height

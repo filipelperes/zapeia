@@ -35,6 +35,8 @@ export interface ChatMessagesResult {
   error: Error | null;
   /** Whether the chat file returned 404 (not configured yet) */
   notFound: boolean;
+  /** Raw text content of the chat file (available after first successful fetch) */
+  rawText: string | null;
   /** Re-fetches the chat file (useful for retry after error) */
   retry: () => void;
 }

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useChatMessages, EmptyState, ErrorDisplay, useUserName } from '@/features/chat';
 import type { ParsedMessage } from '@/features/chat';
 import { loadChatFromCache, saveChatToCache, clearChatCache } from '@/utils/chatCache';
@@ -24,13 +24,12 @@ function ChatLoadingFallback() {
 
 /** WhatsApp Chat Viewer — main application component */
 function App() {
-  const { messages, isLoading, error, notFound, retry } = useChatMessages(CHAT_FILE);
+  const { messages, isLoading, error, notFound, retry, rawText } = useChatMessages(CHAT_FILE);
   // Lazy initialize cached messages from localStorage on first render
   const [cachedMessages] = useState<ParsedMessage[] | null>(() => {
     const cached = loadChatFromCache();
     return cached ? cached.messages : null;
   });
-  const [chatText, setChatText] = useState<string | null>(null);
   const { userName, setUserName, clearUserName } = useUserName();
   const { t } = useTranslation();
 
@@ -41,20 +40,10 @@ function App() {
     }
   }, [notFound, messages.length]);
 
-  // Capture raw chat text for title derivation
-  useEffect(() => {
-    if (messages.length > 0 && !chatText) {
-      fetch(CHAT_FILE)
-        .then((r) => r.text())
-        .then((text) => setChatText(text))
-        .catch(() => { /* ignore — title extraction is optional */ });
-    }
-  }, [messages, chatText]);
-
   // Derive conversation title from the raw chat text + parsed messages
-  function deriveTitle(): string {
-    if (chatText) {
-      return deriveConversationTitle(chatText, messages, t);
+  const title = useMemo(() => {
+    if (rawText) {
+      return deriveConversationTitle(rawText, messages, t);
     }
     if (messages.length > 0) {
       const senders = [...new Set(messages.map((m) => m.sender).filter((s) => s !== 'system'))];
@@ -62,8 +51,7 @@ function App() {
       if (senders.length === 2) return t('app.conversationWithTwo', { name1: senders[0], name2: senders[1] });
     }
     return t('app.whatsappHistory');
-  }
-  const title = deriveTitle();
+  }, [rawText, messages, t]);
 
   // When fresh data arrives, save to cache with the title
   useEffect(() => {
