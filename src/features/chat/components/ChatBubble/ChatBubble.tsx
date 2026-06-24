@@ -9,6 +9,8 @@ interface ChatBubbleProps {
   message: ParsedMessage;
   myName?: string;
   searchQuery?: string;
+  /** Locale string for date/time formatting. Passed down to MessageTime. */
+  locale?: string;
 }
 
 function SenderName({ name }: { name: string }) {
@@ -53,7 +55,7 @@ function MessageBody({ type, content, searchQuery }: { type: ParsedMessage['type
  * - Deleted messages show a strikethrough placeholder
  * - Messages appear as white bubbles on the WhatsApp beige background
  */
-export const ChatBubble = memo(function ChatBubble({ message, myName, searchQuery }: ChatBubbleProps) {
+export const ChatBubble = memo(function ChatBubble({ message, myName, searchQuery, locale }: ChatBubbleProps) {
   const { sender, content, date, time, type, edited } = message;
 
   if (type === 'system') {
@@ -75,7 +77,7 @@ export const ChatBubble = memo(function ChatBubble({ message, myName, searchQuer
         </div>
         <div className="flex items-center justify-end gap-1 -mb-1 mt-0.5">
           {edited && <EditedIndicator />}
-          <MessageTime date={date} time={time} />
+          <MessageTime date={date} time={time} locale={locale} />
         </div>
       </div>
     </div>

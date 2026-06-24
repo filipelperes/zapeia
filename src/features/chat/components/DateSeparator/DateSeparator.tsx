@@ -1,15 +1,15 @@
 import { memo, useMemo } from 'react';
 import { formatDateString } from '@/utils/formatDateString';
-import { useLocale } from '@/features/chat/hooks/useLocale';
 
 interface DateSeparatorProps {
   date: string;
   time: string;
+  /** Locale string for date/time formatting. Avoids per-component context reads. */
+  locale?: string;
 }
 
 /** Renders a WhatsApp-style date separator line between messages */
-export const DateSeparator = memo(function DateSeparator({ date, time }: DateSeparatorProps) {
-  const { locale } = useLocale();
+export const DateSeparator = memo(function DateSeparator({ date, time, locale = 'en-US' }: DateSeparatorProps) {
   const formatted = useMemo(() => formatDateString(date, time, locale), [date, time, locale]);
 
   return (

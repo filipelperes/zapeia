@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { ChatBubble } from '@/features/chat/components/ChatBubble';
 import { DateSeparator } from '@/features/chat/components/DateSeparator';
+import { useLocale } from '@/features/chat/hooks/useLocale';
 import type { ParsedMessage } from '@/features/chat/types';
 
 interface MessageListProps {
@@ -57,6 +58,7 @@ const ROW_ESTIMATE = 80;
  */
 export const MessageList = memo(function MessageList({ messages, searchQuery, myName }: MessageListProps) {
   const { t } = useTranslation();
+  const { locale } = useLocale();
   const containerRef = useRef<HTMLDivElement>(null);
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(true);
@@ -66,14 +68,22 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
     return messages.filter((msg) => matchesSearch(msg, searchQuery));
   }, [messages, searchQuery]);
 
+  // Stable ref to filteredMessages — used by getItemKey below so that the
+  // callback identity never changes, preventing unnecessary virtualizer
+  // recomputation when only the filter results change.
+  const filteredMessagesRef = useRef(filteredMessages);
+  filteredMessagesRef.current = filteredMessages;
+
   // Memoize virtualizer callbacks to prevent cascading re-renders.
   // The tanstack-virtual skill explicitly warns: "Not memoizing the
   // estimateSize function (causes re-renders)" — same applies to getItemKey.
   const estimateSize = useCallback(() => ROW_ESTIMATE, []);
   const getItemKey = useCallback(
-    (index: number) =>
-      `${filteredMessages[index].date}-${filteredMessages[index].time}-${filteredMessages[index].sender}-${index}`,
-    [filteredMessages],
+    (index: number) => {
+      const msg = filteredMessagesRef.current[index];
+      return `${msg.date}-${msg.time}-${msg.sender}-${index}`;
+    },
+    [], // stable identity — reads from ref instead of closing over filteredMessages
   );
   const measureEl = useCallback(
     (el: Element | null) => el?.getBoundingClientRect().height ?? ROW_ESTIMATE,
@@ -213,8 +223,8 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
                 >
-                  {showDateSeparator && <DateSeparator date={message.date} time={message.time} />}
-                  <ChatBubble message={message} myName={myName} searchQuery={searchQuery} />
+                  {showDateSeparator && <DateSeparator date={message.date} time={message.time} locale={locale} />}
+                  <ChatBubble message={message} myName={myName} searchQuery={searchQuery} locale={locale} />
                 </div>
               );
             })}
@@ -227,8 +237,8 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
             const showDateSeparator = isNewDay(message, filteredMessages[index - 1]);
             return (
               <div key={`${message.date}-${message.time}-${message.sender}-${index}`}>
-                {showDateSeparator && <DateSeparator date={message.date} time={message.time} />}
-                <ChatBubble message={message} myName={myName} searchQuery={searchQuery} />
+                {showDateSeparator && <DateSeparator date={message.date} time={message.time} locale={locale} />}
+                <ChatBubble message={message} myName={myName} searchQuery={searchQuery} locale={locale} />
               </div>
             );
           })

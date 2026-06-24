@@ -63,10 +63,10 @@ export default interface Resources {
       "enableLightMode": "Enable light mode",
       "lightMode": "Light mode"
     },
-      "userMenu": {
-        "apply": "Apply",
-        "back": "Back",
-        "cancel": "Cancel",
+    "userMenu": {
+      "apply": "Apply",
+      "back": "Back",
+      "cancel": "Cancel",
       "clearName": "Clear name",
       "customLocale": "Or type a custom locale:",
       "dateFormat": "Date format",
