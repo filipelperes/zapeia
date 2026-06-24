@@ -1,5 +1,6 @@
 import { memo, useRef, useEffect, useMemo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { ChatBubble } from '@/features/chat/components/ChatBubble';
 import { DateSeparator } from '@/features/chat/components/DateSeparator';
 import type { ParsedMessage } from '@/features/chat/types';
@@ -43,15 +44,19 @@ function ArrowDownIcon() {
 }
 
 const SCROLL_THRESHOLD = 200;
+/** Estimated height per message row — virtualizer uses this before measuring */
+const ROW_ESTIMATE = 80;
 
 /**
- * Renders a scrollable list of WhatsApp messages with date separators.
+ * Renders a virtualized (performant) scrollable list of WhatsApp messages
+ * with date separators. Only visible DOM nodes are rendered — items outside
+ * the viewport are recycled. The data order (chronological) is never changed.
+ *
  * Supports optional search filtering by content or sender name.
  * Auto-scrolls to the bottom when new messages arrive.
  */
 export const MessageList = memo(function MessageList({ messages, searchQuery, myName }: MessageListProps) {
   const { t } = useTranslation();
-  const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(true);
@@ -61,19 +66,76 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
     return messages.filter((msg) => matchesSearch(msg, searchQuery));
   }, [messages, searchQuery]);
 
+  // Memoize virtualizer callbacks to prevent cascading re-renders.
+  // The tanstack-virtual skill explicitly warns: "Not memoizing the
+  // estimateSize function (causes re-renders)" — same applies to getItemKey.
+  const estimateSize = useCallback(() => ROW_ESTIMATE, []);
+  const getItemKey = useCallback(
+    (index: number) =>
+      `${filteredMessages[index].date}-${filteredMessages[index].time}-${filteredMessages[index].sender}-${index}`,
+    [filteredMessages],
+  );
+  const measureEl = useCallback(
+    (el: Element | null) => el?.getBoundingClientRect().height ?? ROW_ESTIMATE,
+    [],
+  );
+
+  // Custom scrollToFn enables smooth scrolling via scrollToIndex({ behavior: 'smooth' }).
+  // Falls back to scrollTop when scrollTo isn't available (jsdom).
+  const scrollToFn = useCallback(
+    (offset: number, { behavior }: { behavior?: ScrollBehavior }, instance: { scrollElement?: HTMLElement | null }) => {
+      const el = instance.scrollElement;
+      if (!el) return;
+      if (typeof el.scrollTo === 'function') {
+        if (behavior === 'smooth') {
+          el.scrollTo({ top: offset, behavior: 'smooth' });
+        } else {
+          el.scrollTo({ top: offset });
+        }
+      } else {
+        el.scrollTop = offset;
+      }
+    },
+    [],
+  );
+
+  const virtualizer = useVirtualizer({
+    count: filteredMessages.length,
+    getScrollElement: () => containerRef.current,
+    estimateSize,
+    overscan: 10,
+    getItemKey,
+    measureElement: measureEl,
+    scrollToFn,
+  });
+
+  const virtualItems = virtualizer.getVirtualItems();
+  /** When the container has no scrollable area (e.g. jsdom tests, zero-height
+   *  containers), the virtualizer returns 0 items. Fall back to flat rendering
+   *  so tests and edge-cases still work. */
+  const useVirtualization = virtualItems.length > 0;
+
   // Auto-scroll to bottom on initial load, and when new messages arrive
   // but only if user was already at the bottom (not mid-scroll).
   const prevLength = useRef(0);
+  const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (prevLength.current === 0) {
-      // Initial auto-scroll to bottom
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    } else if (filteredMessages.length > prevLength.current && atBottom) {
-      // Auto-scroll only when user is at bottom and new messages arrive
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const count = filteredMessages.length;
+    if (prevLength.current === 0 && count > 0) {
+      if (useVirtualization) {
+        virtualizer.scrollToIndex(count - 1, { align: 'end' });
+      } else {
+        bottomRef.current?.scrollIntoView({ behavior: 'auto' });
+      }
+    } else if (count > prevLength.current && atBottom) {
+      if (useVirtualization) {
+        virtualizer.scrollToIndex(count - 1, { align: 'end' });
+      } else {
+        bottomRef.current?.scrollIntoView({ behavior: 'auto' });
+      }
     }
-    prevLength.current = filteredMessages.length;
-  }, [filteredMessages, atBottom]);
+    prevLength.current = count;
+  }, [filteredMessages, atBottom, virtualizer, useVirtualization]);
 
   const updateScrollState = useCallback(() => {
     const el = containerRef.current;
@@ -84,12 +146,23 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
   }, []);
 
   const scrollToTop = useCallback(() => {
-    containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+    if (useVirtualization) {
+      virtualizer.scrollToIndex(0, { align: 'start', behavior: 'smooth' });
+    } else {
+      containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [virtualizer, useVirtualization]);
 
   const scrollToBottom = useCallback(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
+    const count = filteredMessages.length;
+    if (count > 0) {
+      if (useVirtualization) {
+        virtualizer.scrollToIndex(count - 1, { align: 'end', behavior: 'smooth' });
+      } else {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [filteredMessages.length, virtualizer, useVirtualization]);
 
   const showScrollToTop = !atTop;
   const showScrollToBottom = !atBottom;
@@ -97,7 +170,7 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
   if (filteredMessages.length === 0 && searchQuery) {
     return (
       <div className="flex-1 overflow-y-auto px-2 py-3">
-        <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+        <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-300 text-sm">
           {t('chat.noResultsFound')}
         </div>
       </div>
@@ -111,15 +184,44 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
         onScroll={updateScrollState}
         className="absolute inset-0 overflow-y-auto px-2 py-3"
       >
-        {filteredMessages.map((message, index) => {
-          const showDateSeparator = isNewDay(message, filteredMessages[index - 1]);
-          return (
-            <div key={`${message.date}-${message.time}-${index}`}>
-              {showDateSeparator && <DateSeparator date={message.date} time={message.time} />}
-              <ChatBubble message={message} myName={myName} searchQuery={searchQuery} />
-            </div>
-          );
-        })}
+        {useVirtualization ? (
+          <div style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative', width: '100%' }}>
+            {virtualItems.map((virtualRow) => {
+              const message = filteredMessages[virtualRow.index];
+              const showDateSeparator = isNewDay(message, filteredMessages[virtualRow.index - 1]);
+              return (
+                <div
+                  key={virtualRow.key}
+                  data-index={virtualRow.index}
+                  ref={virtualizer.measureElement}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    transform: `translateY(${virtualRow.start}px)`,
+                  }}
+                >
+                  {showDateSeparator && <DateSeparator date={message.date} time={message.time} />}
+                  <ChatBubble message={message} myName={myName} searchQuery={searchQuery} />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          // Fallback: render all items when the container has no scrollable area
+          // (e.g. jsdom tests). This path is also taken for very small lists
+          // where virtualization overhead is unnecessary.
+          filteredMessages.map((message, index) => {
+            const showDateSeparator = isNewDay(message, filteredMessages[index - 1]);
+            return (
+              <div key={`${message.date}-${message.time}-${message.sender}-${index}`}>
+                {showDateSeparator && <DateSeparator date={message.date} time={message.time} />}
+                <ChatBubble message={message} myName={myName} searchQuery={searchQuery} />
+              </div>
+            );
+          })
+        )}
         <div ref={bottomRef} />
       </div>
 
@@ -127,7 +229,7 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
       {showScrollToTop && (
         <button
           onClick={scrollToTop}
-          className="absolute top-3 right-3 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 dark:bg-[#1F2C33]/90 text-gray-600 dark:text-[#E9EDEF] shadow-md hover:bg-white dark:hover:bg-[#2F3D46] transition-all border border-gray-200 dark:border-[#2F3D46] backdrop-blur-sm"
+          className="absolute top-3 right-3 z-[1] w-9 h-9 flex items-center justify-center rounded-full bg-white/90 dark:bg-[#1F2C33]/90 text-gray-600 dark:text-[#E9EDEF] shadow-md hover:bg-white dark:hover:bg-[#2F3D46] transition-all border border-gray-200 dark:border-[#2F3D46] backdrop-blur-sm"
           aria-label="Scroll to top"
         >
           <ArrowUpIcon />
@@ -136,7 +238,7 @@ export const MessageList = memo(function MessageList({ messages, searchQuery, my
       {showScrollToBottom && (
         <button
           onClick={scrollToBottom}
-          className="absolute bottom-3 right-3 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 dark:bg-[#1F2C33]/90 text-gray-600 dark:text-[#E9EDEF] shadow-md hover:bg-white dark:hover:bg-[#2F3D46] transition-all border border-gray-200 dark:border-[#2F3D46] backdrop-blur-sm"
+          className="absolute bottom-3 right-3 z-[1] w-9 h-9 flex items-center justify-center rounded-full bg-white/90 dark:bg-[#1F2C33]/90 text-gray-600 dark:text-[#E9EDEF] shadow-md hover:bg-white dark:hover:bg-[#2F3D46] transition-all border border-gray-200 dark:border-[#2F3D46] backdrop-blur-sm"
           aria-label="Scroll to bottom"
         >
           <ArrowDownIcon />

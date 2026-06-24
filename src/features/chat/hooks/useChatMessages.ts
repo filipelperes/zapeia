@@ -15,12 +15,26 @@ function bustCache(url: string): string {
 }
 
 /**
+ * Detects when the response is NOT the actual chat file.
+ *
+ * Vite's dev server returns `200` with `index.html` (Content-Type: text/html)
+ * for any request to a missing file in `public/` – the SPA fallback.
+ * The real `chat.txt` would have Content-Type: text/plain or similar.
+ */
+function isFileNotFound(response: Response): boolean {
+  return (
+    response.status === 404 ||
+    (response.headers?.get?.('content-type') ?? '').includes('text/html')
+  );
+}
+
+/**
  * Fetches and parses a WhatsApp chat export file.
  *
- * Auto-detects when `chat.txt` is added or removed:
- * - File returns 404 → `notFound = true`, polls with GET every 5s
- * - File loaded successfully → lightweight HEAD check every 5s detects removal
- * - When file appears or reappears → loads and renders automatically
+ * Auto-detects when `chat.txt` is added, removed, or modified:
+ * - File returns 404 / SPA fallback HTML → `notFound = true`, renders EmptyState
+ * - File appears/reappears/modified → re-parses and renders automatically
+ * - Same content → no-op (avoids unnecessary re-renders)
  *
  * @param chatFilePath - Path to the chat text file relative to the base URL
  * @returns An object containing parsed messages, loading state, error, notFound, and retry
@@ -33,21 +47,51 @@ export function useChatMessages(chatFilePath: string): ChatMessagesResult {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const cancelledRef = useRef(false);
   const loadCountRef = useRef(0);
-  /** Mirror `notFound` in a ref so the interval callback always reads the latest value */
-  const notFoundRef = useRef(false);
+  const lastContentRef = useRef<string | null>(null);
 
   // Keep a ref of chatFilePath to avoid stale closures in the interval callback
   const chatFilePathRef = useRef(chatFilePath);
 
-  // Sync refs with state
+  // Sync ref with state
   useEffect(() => {
     chatFilePathRef.current = chatFilePath;
   }, [chatFilePath]);
-  useEffect(() => {
-    notFoundRef.current = notFound;
-  }, [notFound]);
 
-  // Initial fetch + periodic health check (GET when notFound, HEAD when loaded)
+  /**
+   * Shared handler for both initial fetch and interval polling.
+   *
+   * When called from `fetchChat`, pass `currentLoad` to guard against
+   * stale promises resolving after the effect has re-run.
+   * The interval never passes it (freshness is guaranteed by the cleanup).
+   */
+  async function handleResponse(response: Response, loadCount?: number): Promise<void> {
+    // Stale guard: ignore if a newer effect cycle has started
+    if (loadCount !== undefined && loadCount !== loadCountRef.current) return;
+
+    if (isFileNotFound(response)) {
+      if (!cancelledRef.current) {
+        setMessages([]);
+        setNotFound(true);
+      }
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(i18n.t('error.failedToLoadFile', { statusText: response.statusText }));
+    }
+
+    const text = await response.text();
+    if (cancelledRef.current) return;
+
+    // Only update if content actually changed (avoids unnecessary re-renders)
+    if (text !== lastContentRef.current) {
+      lastContentRef.current = text;
+      setMessages(parseChat(text));
+      setNotFound(false);
+    }
+  }
+
+  // Initial fetch + periodic health check
   useEffect(() => {
     cancelledRef.current = false;
     const currentLoad = ++loadCountRef.current;
@@ -57,27 +101,8 @@ export function useChatMessages(chatFilePath: string): ChatMessagesResult {
       setError(null);
 
       try {
-        // bustCache ensures we never get a stale HTTP-cached 200 when the file was removed
         const response = await fetch(bustCache(chatFilePathRef.current));
-
-        if (response.status === 404) {
-          if (!cancelledRef.current && currentLoad === loadCountRef.current) {
-            setNotFound(true);
-            setMessages([]);
-          }
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error(i18n.t('error.failedToLoadFile', { statusText: response.statusText }));
-        }
-
-        const text = await response.text();
-
-        if (!cancelledRef.current && currentLoad === loadCountRef.current) {
-          setMessages(parseChat(text));
-          setNotFound(false);
-        }
+        await handleResponse(response, currentLoad);
       } catch (err) {
         if (!cancelledRef.current && currentLoad === loadCountRef.current) {
           const error = err instanceof Error ? err : new Error(i18n.t('error.unknownError'));
@@ -93,23 +118,15 @@ export function useChatMessages(chatFilePath: string): ChatMessagesResult {
 
     fetchChat();
 
+    // Poll every 5s to detect file removal, re-addition, or content changes
     const intervalId = window.setInterval(async () => {
       if (cancelledRef.current) return;
 
-      if (notFoundRef.current) {
-        // File not yet available → full GET to detect when it appears
-        await fetchChat();
-      } else {
-        // File is loaded → lightweight HEAD to detect when it's removed
-        try {
-          const res = await fetch(bustCache(chatFilePathRef.current), { method: 'HEAD' });
-          if (res.status === 404 && !cancelledRef.current) {
-            setMessages([]);
-            setNotFound(true);
-          }
-        } catch {
-          // Ignore transient network errors during health check
-        }
+      try {
+        const response = await fetch(bustCache(chatFilePathRef.current));
+        await handleResponse(response);
+      } catch {
+        // Ignore transient network errors during health check
       }
     }, POLL_INTERVAL_MS);
 
