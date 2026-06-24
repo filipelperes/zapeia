@@ -142,10 +142,10 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
       </button>
 
       {open && (
-        <div className="chat-setting-dropdown absolute right-0 top-full mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
+        <div className="absolute right-0 top-full mt-2 w-72 bg-white dark:bg-[#1F2C33] rounded-lg shadow-xl border border-gray-200 dark:border-[#2F3D46] z-50 overflow-hidden">
           {editing ? (
             <div className="p-3">
-              <p className="text-xs text-gray-500 mb-2 font-medium">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">
                 {t('userMenu.yourNameInMessages')}
               </p>
               <input
@@ -155,7 +155,7 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
                 onChange={(e) => setNameInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('userMenu.namePlaceholder')}
-                className="chat-setting-input w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg outline-none focus:border-[#00A884] transition-colors"
+                className="w-full px-3 py-2 text-sm text-gray-900 dark:text-[#E9EDEF] bg-gray-50 dark:bg-[#111B21] border border-gray-300 dark:border-[#2F3D46] rounded-lg outline-none focus:border-[#00A884] transition-colors"
               />
               <div className="flex justify-end gap-2 mt-2">
                 <button
@@ -163,7 +163,7 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
                     setEditing(false);
                     setOpen(false);
                   }}
-                  className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors"
+                  className="px-3 py-1.5 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
                 >
                   {t('userMenu.cancel')}
                 </button>
@@ -182,14 +182,14 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
               <div className="flex items-center gap-2 mb-3">
                 <button
                   onClick={() => setLocaleEditing(false)}
-                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                  className="p-1 hover:bg-gray-100 dark:hover:bg-[#2F3D46] rounded transition-colors"
                   aria-label={t('userMenu.back')}
                 >
-                  <svg className="w-4 h-4 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="w-4 h-4 text-gray-600 dark:text-gray-300" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
                   </svg>
                 </button>
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
                   {t('userMenu.dateFormat')}
                 </p>
               </div>
@@ -202,14 +202,14 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
                     className={`text-left px-2 py-1.5 text-xs rounded transition-colors ${
                       locale === loc.code
                         ? 'bg-[#00A884]/10 text-[#00A884] font-medium'
-                        : 'text-gray-600 hover:bg-gray-100'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#2F3D46]'
                     }`}
                   >
                     {loc.label}
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mb-1">{t('userMenu.customLocale')}</p>
+              <p className="text-xs text-gray-400 dark:text-[#8696A0] mb-1">{t('userMenu.customLocale')}</p>
               <input
                 ref={localeInputRef}
                 type="text"
@@ -217,12 +217,12 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
                 onChange={(e) => setLocaleInput(e.target.value)}
                 onKeyDown={handleLocaleKeyDown}
                 placeholder={t('userMenu.localePlaceholder')}
-                className="chat-setting-input w-full px-3 py-2 text-sm rounded-lg outline-none focus:border-[#00A884] transition-colors"
+                className="w-full px-3 py-2 text-sm text-gray-900 dark:text-[#E9EDEF] bg-gray-50 dark:bg-[#111B21] border border-gray-300 dark:border-[#2F3D46] rounded-lg outline-none focus:border-[#00A884] transition-colors"
               />
               <div className="flex justify-end gap-2 mt-2">
                 <button
                   onClick={() => setLocaleEditing(false)}
-                  className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors"
+                  className="px-3 py-1.5 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
                 >
                   {t('userMenu.cancel')}
                 </button>
@@ -237,20 +237,20 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
             </div>
           ) : (
             <div className="py-1">
-              <div className="px-3 py-2 text-xs text-gray-400 font-medium uppercase tracking-wide">
+              <div className="px-3 py-2 text-xs text-gray-400 dark:text-[#8696A0] font-medium uppercase tracking-wide">
                 {t('userMenu.settings')}
               </div>
               <button
                 onClick={handleEditClick}
-                  className="chat-menu-item w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-[#E9EDEF] hover:bg-gray-100 dark:hover:bg-[#2F3D46] transition-colors"
               >
                 {userName ? (
                   <>
-                    <span className="block text-xs text-gray-400">{t('userMenu.yourName')}</span>
+                    <span className="block text-xs text-gray-400 dark:text-[#8696A0]">{t('userMenu.yourName')}</span>
                     <span className="block text-sm font-medium text-[#06CF9C]">{userName}</span>
                   </>
                 ) : (
-                  <span className="block text-sm text-gray-600">{t('userMenu.setMyName')}</span>
+                  <span className="block text-sm text-gray-600 dark:text-gray-400">{t('userMenu.setMyName')}</span>
                 )}
               </button>
               {userName && (
@@ -259,21 +259,21 @@ export const UserMenu = memo(function UserMenu({ userName = '', onNameChange, on
                     onNameClear?.();
                     setOpen(false);
                   }}
-                  className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 transition-colors"
+                  className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-[#2F3D46] transition-colors"
                 >
                   {t('userMenu.clearName')}
                 </button>
               )}
               {/* Date format locale selector */}
-              <div className="border-t border-gray-100 mt-1 pt-1">
+              <div className="border-t border-gray-100 dark:border-[#2F3D46] mt-1 pt-1">
                 <button
                   onClick={() => {
                     setLocaleInput(locale);
                     setLocaleEditing(true);
                   }}
-                  className="chat-menu-item w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-[#E9EDEF] hover:bg-gray-100 dark:hover:bg-[#2F3D46] transition-colors"
                 >
-                  <span className="block text-xs text-gray-400">{t('userMenu.dateFormat')}</span>
+                  <span className="block text-xs text-gray-400 dark:text-[#8696A0]">{t('userMenu.dateFormat')}</span>
                   <span className="block text-sm font-medium text-[#06CF9C]">{locale}</span>
                 </button>
               </div>

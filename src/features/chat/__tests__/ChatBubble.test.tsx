@@ -380,29 +380,26 @@ describe('ChatBubble', () => {
       };
 
       it('should align right and hide sender when myName matches sender', () => {
-         const { container } = render(<ChatBubble message={ownMessage} myName="Felipe" />);
-         const bubble = container.querySelector('.chat-bubble-own');
-         expect(bubble).not.toBeNull();
-         expect(screen.queryByText('Felipe')).toBeNull();
-      });
+          const { container } = render(<ChatBubble message={ownMessage} myName="Felipe" />);
+          expect(container.querySelector('[data-own="true"]')).not.toBeNull();
+          expect(screen.queryByText('Felipe')).toBeNull();
+       });
 
-      it('should align left and show sender when myName does not match', () => {
-         const { container } = render(<ChatBubble message={ownMessage} myName="Maria" />);
-         const bubble = container.querySelector('.chat-bubble');
-         expect(bubble).not.toBeNull();
-         expect(screen.getByText('Felipe')).toBeDefined();
-      });
+       it('should align left and show sender when myName does not match', () => {
+          const { container } = render(<ChatBubble message={ownMessage} myName="Maria" />);
+          expect(container.querySelector('[data-own="false"]')).not.toBeNull();
+          expect(screen.getByText('Felipe')).toBeDefined();
+       });
 
-      it('should align left when myName is empty string', () => {
-         const { container } = render(<ChatBubble message={ownMessage} myName="" />);
-         const bubble = container.querySelector('.chat-bubble');
-         expect(bubble).not.toBeNull();
-      });
+       it('should align left when myName is empty string', () => {
+          const { container } = render(<ChatBubble message={ownMessage} myName="" />);
+          expect(container.querySelector('[data-own="false"]')).not.toBeNull();
+       });
 
-      it('should match sender case-insensitively', () => {
-         const { container } = render(<ChatBubble message={ownMessage} myName="felipe" />);
-         expect(container.querySelector('.chat-bubble-own')).not.toBeNull();
-      });
+       it('should match sender case-insensitively', () => {
+          const { container } = render(<ChatBubble message={ownMessage} myName="felipe" />);
+          expect(container.querySelector('[data-own="true"]')).not.toBeNull();
+       });
    });
 
    describe('edited indicator', () => {

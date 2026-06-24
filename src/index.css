@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
    --font-inter: 'Inter', sans-serif;
@@ -40,6 +41,10 @@
       background-color: #111B21;
    }
 
+   :where(.dark) body {
+      background-color: #0B141A;
+   }
+
    ul {
       list-style-type: none;
    }
@@ -63,6 +68,10 @@
       background-color: #111B21;
    }
 
+   :where(.dark) #root {
+      background-color: #0B141A;
+   }
+
    /* Custom scrollbar — WhatsApp Web style */
    ::-webkit-scrollbar {
       width: 6px;
@@ -81,117 +90,29 @@
    ::-webkit-scrollbar-thumb {
       background-color: rgba(0, 0, 0, 0.2);
       border-radius: 4px;
-      min-height: 40px; /* easier to grab on mobile */
+      min-height: 40px;
    }
 
-   ::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(0, 0, 0, 0.3);
+   :where(.dark) ::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.15);
    }
+
+    ::-webkit-scrollbar-thumb:hover {
+       background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    :where(.dark) ::-webkit-scrollbar-thumb:hover {
+       background-color: rgba(255, 255, 255, 0.25);
+    }
 }
 
-/* WhatsApp Dark Mode — applied via data-theme="dark" on <html> */
-[data-theme="dark"] {
-   --chat-bg: #0B141A;
-   --chat-pattern: #101A20;
-   --chat-bubble: #1F2C33;
-   --chat-bubble-own: #005C4B;
-   --chat-text: #E9EDEF;
-   --chat-subtext: #8696A0;
-   --chat-header: #1F2C33;
-   --chat-input: #1F2C33;
-   --chat-input-border: #2F3D46;
+/* Chat background surface — WhatsApp beige pattern in light, solid dark in dark mode */
+.surface-chat {
+   background-color: #E5DDD5;
+   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D6CDC1' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-[data-theme="dark"] body {
+:where(.dark) .surface-chat {
    background-color: #0B141A;
-}
-
-[data-theme="dark"] #root {
-   background-color: #0B141A;
-}
-
-[data-theme="dark"] .chat-bg {
-   background-color: #0B141A !important;
-   background-image: none !important;
-}
-
-[data-theme="dark"] .chat-bubble {
-   background-color: #1F2C33 !important;
-   color: #E9EDEF !important;
-}
-
-[data-theme="dark"] .chat-bubble-own {
-   background-color: #005C4B !important;
-   color: #E9EDEF !important;
-}
-
-[data-theme="dark"] .chat-bubble-text {
-   color: #E9EDEF !important;
-}
-
-[data-theme="dark"] .chat-system {
-   background-color: #182229 !important;
-   color: #8696A0 !important;
-}
-
-[data-theme="dark"] .chat-date {
-   background-color: #182229 !important;
-   color: #8696A0 !important;
-}
-
-[data-theme="dark"] .chat-input {
-   background-color: #1F2C33 !important;
-   border-top-color: #2F3D46 !important;
-}
-
-[data-theme="dark"] .chat-header {
-   background-color: #1F2C33 !important;
-}
-
-[data-theme="dark"] .chat-avatar {
-   background-color: #2A8C7C !important;
-}
-
-[data-theme="dark"] .chat-setting-input {
-   background-color: #111B21 !important;
-   border-color: #2F3D46 !important;
-   color: #E9EDEF !important;
-}
-
-[data-theme="dark"] .chat-setting-dropdown {
-   background-color: #1F2C33 !important;
-   border-color: #2F3D46 !important;
-}
-
-[data-theme="dark"] .chat-menu-item {
-   color: #E9EDEF !important;
-}
-
-[data-theme="dark"] .chat-menu-item:hover {
-   background-color: #2F3D46 !important;
-}
-
-[data-theme="dark"] .chat-input-field {
-   background-color: #2A3942 !important;
-   color: #E9EDEF !important;
-}
-
-[data-theme="dark"] .chat-input-field::placeholder {
-   color: #8696A0 !important;
-}
-
-[data-theme="dark"] .chat-input-icon {
-   color: #8696A0 !important;
-}
-
-[data-theme="dark"] .chat-input-icon:hover {
-   color: #E9EDEF !important;
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
-   background-color: rgba(255, 255, 255, 0.15);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
-   background-color: rgba(255, 255, 255, 0.25);
+   background-image: none;
 }

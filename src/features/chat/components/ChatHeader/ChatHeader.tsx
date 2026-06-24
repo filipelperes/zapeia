@@ -27,7 +27,7 @@ function Avatar({ title }: { title: string }) {
   const initials = useMemo(() => getInitials(title), [title]);
 
   return (
-    <div className="chat-avatar w-10 h-10 rounded-full bg-[#6BA89E] flex items-center justify-center text-white font-bold text-sm shrink-0">
+    <div className="w-10 h-10 rounded-full bg-[#6BA89E] dark:bg-[#2A8C7C] flex items-center justify-center text-white font-bold text-sm shrink-0">
       {initials}
     </div>
   );
@@ -72,7 +72,7 @@ export const ChatHeader = memo(function ChatHeader({
   const resolvedTitle = title ?? t('app.whatsappHistory');
 
   return (
-    <header className="chat-header sticky top-0 z-10 flex items-center gap-3 px-4 py-3 bg-[#075E54] text-white shadow-md">
+    <header className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3 bg-[#075E54] dark:bg-[#1F2C33] text-white shadow-md">
       <Avatar title={resolvedTitle} />
       <div className="flex-1 min-w-0">
         {isSearching ? (
@@ -82,7 +82,7 @@ export const ChatHeader = memo(function ChatHeader({
             value={searchQuery}
             onChange={(e) => onSearchQueryChange?.(e.target.value)}
             placeholder={t('chat.searchPlaceholder')}
-            className="w-full bg-[#1F2C33] text-white placeholder-[#8696A0] rounded-lg px-3 py-1.5 text-sm outline-none border border-transparent focus:border-[#00A884] transition-colors"
+            className="w-full bg-white/20 dark:bg-[#2A3942] text-white placeholder-[#8696A0] rounded-lg px-3 py-1.5 text-sm outline-none border border-transparent focus:border-[#00A884] transition-colors"
           />
         ) : (
           <>

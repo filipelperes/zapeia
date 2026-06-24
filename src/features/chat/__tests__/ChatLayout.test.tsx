@@ -74,11 +74,11 @@ describe('ChatLayout', () => {
        expect(screen.getByText('WhatsApp History')).toBeDefined();
    });
 
-   it('should render with WhatsApp background style', () => {
-      const { container } = render(<ChatLayout messages={messages} />);
-      const layout = container.firstChild as HTMLElement;
-      expect(layout.style.backgroundColor).toBeTruthy();
-   });
+    it('should render with WhatsApp background style', () => {
+       const { container } = render(<ChatLayout messages={messages} />);
+       const layout = container.firstChild as HTMLElement;
+       expect(layout.classList.contains('surface-chat')).toBe(true);
+    });
 
    it('should render large number of messages', () => {
       const manyMsgs: ParsedMessage[] = Array.from({ length: 100 }, (_, i) => ({
@@ -254,11 +254,12 @@ describe('ChatLayout', () => {
       expect(screen.getByText('Diana')).toBeDefined();
    });
 
-   it('should render chat background with WhatsApp pattern', () => {
-      const { container } = render(<ChatLayout messages={messages} />);
-      const layout = container.firstChild as HTMLElement;
-      expect(layout.style.backgroundColor).toBe('rgb(229, 221, 213)');
-   });
+    it('should render chat background with WhatsApp pattern', () => {
+       const { container } = render(<ChatLayout messages={messages} />);
+       const layout = container.firstChild as HTMLElement;
+       expect(layout.classList.contains('surface-chat')).toBe(true);
+       expect(layout.className).toContain('overflow-hidden');
+    });
 
    it('should render with media messages in layout', () => {
       const mediaMsgs: ParsedMessage[] = [

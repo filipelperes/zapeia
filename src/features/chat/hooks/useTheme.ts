@@ -15,11 +15,7 @@ function getInitialTheme(): Theme {
 }
 
 function applyTheme(theme: Theme): void {
-  if (theme === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-  }
+  document.documentElement.classList.toggle('dark', theme === 'dark');
 }
 
 export function useTheme() {

@@ -63,14 +63,14 @@ export const ChatBubble = memo(function ChatBubble({ message, myName, searchQuer
   const isOwn = myName && sender.toLowerCase() === myName.toLowerCase();
 
   return (
-    <div className={`flex flex-col px-4 my-0.5 ${isOwn ? 'items-end' : 'items-start'}`}>
+    <div data-own={isOwn ? 'true' : 'false'} className={`flex flex-col px-4 my-0.5 ${isOwn ? 'items-end' : 'items-start'}`}>
       <div
         className={`max-w-[85%] w-fit rounded-lg shadow-sm px-3 py-1.5 ${
-          isOwn ? 'chat-bubble-own bg-[#D9FDD3]' : 'chat-bubble bg-white'
+          isOwn ? 'bg-[#D9FDD3] dark:bg-[#005C4B]' : 'bg-white dark:bg-[#1F2C33]'
         }`}
       >
         {!isOwn && <SenderName name={sender} />}
-        <div className="chat-bubble-text text-sm leading-relaxed break-words text-gray-900">
+        <div className="text-sm leading-relaxed break-words text-gray-900 dark:text-[#E9EDEF]">
           <MessageBody type={type} content={content} searchQuery={searchQuery} />
         </div>
         <div className="flex items-center justify-end gap-1 -mb-1 mt-0.5">

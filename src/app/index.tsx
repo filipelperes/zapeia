@@ -72,7 +72,7 @@ function App() {
     return (
       <div className="flex flex-col justify-center items-center h-screen w-screen bg-[#111B21] text-white">
         <div className="animate-spin rounded-full h-14 w-14 border-[3px] border-t-[#00A884] border-b-[#00A884] border-l-transparent border-r-transparent" />
-        <p className="mt-6 text-gray-400 text-base">{t('app.loadingConversations')}</p>
+        <p className="mt-6 text-gray-300 text-base">{t('app.loadingConversations')}</p>
       </div>
     );
   }
