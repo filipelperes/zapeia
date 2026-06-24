@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const STORAGE_KEY = 'wa-user-name';
 
@@ -14,31 +15,18 @@ export interface UserNameActions {
 }
 
 export function useUserName(): UserNameActions {
-  const [userName, setUserNameState] = useState<string>(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) ?? '';
-    } catch {
-      return '';
-    }
-  });
+  const [userName, setUserNameValue, clearUserNameValue] = useLocalStorage<string>(STORAGE_KEY, '');
 
-  const setUserName = useCallback((name: string) => {
-    setUserNameState(name);
-    try {
-      localStorage.setItem(STORAGE_KEY, name);
-    } catch {
-      // localStorage may be unavailable (quota exceeded, private browsing)
-    }
-  }, []);
+  const setUserName = useCallback(
+    (name: string) => {
+      setUserNameValue(name);
+    },
+    [setUserNameValue],
+  );
 
   const clearUserName = useCallback(() => {
-    setUserNameState('');
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // ignore
-    }
-  }, []);
+    clearUserNameValue();
+  }, [clearUserNameValue]);
 
   return { userName, setUserName, clearUserName };
 }

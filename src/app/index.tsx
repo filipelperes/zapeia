@@ -1,11 +1,26 @@
-import { useEffect, useState } from 'react';
-import { useChatMessages, ChatLayout, EmptyState, ErrorDisplay, useUserName } from '@/features/chat';
+import { lazy, Suspense, useEffect, useState } from 'react';
+import { useChatMessages, EmptyState, ErrorDisplay, useUserName } from '@/features/chat';
 import type { ParsedMessage } from '@/features/chat';
 import { loadChatFromCache, saveChatToCache, clearChatCache } from '@/utils/chatCache';
 import { deriveConversationTitle } from '@/utils/parsechat';
 import { useTranslation } from 'react-i18next';
 
 const CHAT_FILE = `${import.meta.env.BASE_URL}chat.txt`;
+
+const ChatLayout = lazy(() =>
+  import('@/features/chat/components/ChatLayout').then((m) => ({ default: m.ChatLayout })),
+);
+
+/** Loading fallback for lazy-loaded ChatLayout */
+function ChatLoadingFallback() {
+  const { t } = useTranslation();
+  return (
+    <div className="flex flex-col justify-center items-center h-screen w-screen bg-[#111B21] text-white">
+      <div className="animate-spin rounded-full h-14 w-14 border-[3px] border-t-[#00A884] border-b-[#00A884] border-l-transparent border-r-transparent" />
+      <p className="mt-6 text-gray-300 text-base">{t('app.loadingConversations')}</p>
+    </div>
+  );
+}
 
 /** WhatsApp Chat Viewer — main application component */
 function App() {
@@ -69,12 +84,7 @@ function App() {
 
   // --- State: loading (first load, no cache) ---
   if (isLoading && displayMessages.length === 0) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen w-screen bg-[#111B21] text-white">
-        <div className="animate-spin rounded-full h-14 w-14 border-[3px] border-t-[#00A884] border-b-[#00A884] border-l-transparent border-r-transparent" />
-        <p className="mt-6 text-gray-300 text-base">{t('app.loadingConversations')}</p>
-      </div>
-    );
+    return <ChatLoadingFallback />;
   }
 
   // --- State: actual error (not 404) ---
@@ -92,13 +102,15 @@ function App() {
   return (
     <div className="flex justify-center items-center h-screen w-screen bg-[#111B21] p-0 md:p-4">
       <div className="h-full w-full md:h-[calc(100%-2rem)] md:w-4/5 max-w-[1200px]">
-        <ChatLayout
-          messages={displayMessages}
-          title={title}
-          myName={userName}
-          onNameChange={setUserName}
-          onNameClear={clearUserName}
-        />
+        <Suspense fallback={<ChatLoadingFallback />}>
+          <ChatLayout
+            messages={displayMessages}
+            title={title}
+            myName={userName}
+            onNameChange={setUserName}
+            onNameClear={clearUserName}
+          />
+        </Suspense>
       </div>
     </div>
   );

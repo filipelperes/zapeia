@@ -2,13 +2,16 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/lib/i18n';
+import { LocaleProvider } from '@/features/chat';
 import '@/index.css';
 import App from '@/app';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <I18nextProvider i18n={i18n}>
-      <App />
+      <LocaleProvider>
+        <App />
+      </LocaleProvider>
     </I18nextProvider>
   </StrictMode>,
 );

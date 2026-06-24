@@ -1,6 +1,5 @@
 export { ChatBubble } from './ChatBubble';
 export { ChatHeader } from './ChatHeader';
-export { ChatLayout } from './ChatLayout';
 export { DateSeparator } from './DateSeparator';
 export { EmptyState } from './EmptyState';
 export { ErrorDisplay } from './ErrorDisplay';

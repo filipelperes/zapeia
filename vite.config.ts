@@ -17,6 +17,17 @@ export default defineConfig({
       },
     ],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes('node_modules/react')) return 'vendor-react';
+          if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) return 'vendor-i18n';
+          if (id.includes('node_modules/@tanstack/react-virtual')) return 'vendor-virtual';
+        },
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
